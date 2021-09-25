@@ -6,6 +6,8 @@ public class Adventure {
 
     public static void main(String[] args) {
 
+        //Initialise rooms
+
         //create all instances of room objects - probably should be an array - data very basic
         Room room1 = new Room("Room1", "Looks like an entrance.");
         Room room2 = new Room("Room2", "Not much to see.");
