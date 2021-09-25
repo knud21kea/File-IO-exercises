@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Adventure {
 
-
     public static void main(String[] args) {
 
         //create all instances of room objects - probably should be an array - data very basic
