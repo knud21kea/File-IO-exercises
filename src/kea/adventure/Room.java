@@ -38,19 +38,13 @@ public class Room {
         return west;
     }
 
-    public void setNorth(Room north) {
-        this.north = north;
-    }
-
-    public void setEast(Room east) {
-        this.east = east;
-    }
-
-    public void setSouth(Room south) {
+    public void connectSouthNorth(Room south) {
         this.south = south;
+        south.north = this;
     }
 
-    public void setWest(Room west) {
-        this.west = west;
+    public void connectEastWest(Room east) {
+        this.east = east;
+        east.west = this;
     }
 }

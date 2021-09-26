@@ -4,66 +4,51 @@ import java.util.Scanner;
 
 public class Adventure {
 
+    private static final Room[] rooms = new Room[10];
+    private static final Scanner input = new Scanner(System.in);
+
     public static void main(String[] args) {
 
-        //Initialise rooms
+        /* *****************************************************************************
+           Initialise rooms and make connections (auto 2-way joins so no 1-way passages)
+           There could be a choice of maps - we have default
+         **************************************************************************** */
 
-        //create all instances of room objects - probably should be an array - data very basic
-        Room room1 = new Room("Room1", "Looks like an entrance.");
-        Room room2 = new Room("Room2", "Not much to see.");
-        Room room3 = new Room("Room3", "The way straight seems blocked");
-        Room room4 = new Room("Room4", "Looks empty");
-        Room room5 = new Room("Room5", "This room looks special.");
-        Room room6 = new Room("Room6", "You see nothing interesting");
-        Room room7 = new Room("Room7", "What is here?...Oh, nothing.");
-        Room room8 = new Room("Room8", "Seems to be several exits");
-        Room room9 = new Room("Room9", "No beer here");
+        buildMap();
 
-        Room currentRoom = room1;
-        Room requestedRoom = null;
+        /* *******************************************************************
+           Introduce game, process player inputs until game is closed - or won
+           There could be a choice of starting locations - we have default
+        ******************************************************************** */
 
-        //Make connections - not auto 2 way and not with map - todo?
-        room1.setEast(room2);
-        room2.setWest(room1);
-        room2.setEast(room3);
-        room3.setWest(room2);
-        room3.setSouth(room6);
-        room6.setNorth(room3);
-        room6.setSouth(room9);
-        room9.setNorth(room6);
-        room9.setWest(room8);
-        room8.setEast(room9);
-        room8.setNorth(room5);
-        room5.setSouth(room8);
-        room8.setWest(room7);
-        room7.setEast(room8);
-        room7.setNorth(room4);
-        room4.setSouth(room7);
-        room4.setNorth(room1);
-        room1.setSouth(room4);
+        playGame();
+    }
 
-        Scanner input = new Scanner(System.in);
+    public static void playGame() {
 
         //Intro and description of start room
-        System.out.println("\nWelcome to this text based Adventure.");
 
-        //Get inputs until user types exit or x
+        System.out.println("\nWelcome to this text based Adventure.");
+        System.out.println("Find the treasure or fail trying. How will it end...?");
+
+        //Get inputs until user types exit or x or game is won
+
         String menuOption = "Z";
-        ;
         while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
-            requestedRoom = currentRoom; //used to only print blocked if user tries a blocked route
-            System.out.print(currentRoom.getRoomName() + ": ");
-            System.out.println(currentRoom.getRoomDescription());
+            Room requestedRoom = rooms[0]; //used to only print blocked if user tries a blocked route
+            System.out.print("\n" + rooms[0].getRoomName() + ": ");
+            System.out.println(rooms[0].getRoomDescription());
             System.out.print("What do you want to do? ");
             menuOption = input.nextLine().toUpperCase();
 
-            //construction is very messy but works. Improvements needed here. Eliminate static variable?
+            //player choice with multiple command forms
+
             switch (menuOption) {
-                case "GO NORTH", "NORTH", "N" -> requestedRoom = currentRoom.getNorthRoom();
-                case "GO EAST", "EAST", "E" -> requestedRoom = currentRoom.getEastRoom();
-                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = currentRoom.getSouthRoom();
-                case "GO WEST", "WEST", "W" -> requestedRoom = currentRoom.getWestRoom();
-                case "LOOK", "L" -> System.out.print("OK. ");
+                case "GO NORTH", "NORTH", "N" -> requestedRoom = rooms[0].getNorthRoom();
+                case "GO EAST", "EAST", "E" -> requestedRoom = rooms[0].getEastRoom();
+                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = rooms[0].getSouthRoom();
+                case "GO WEST", "WEST", "W" -> requestedRoom = rooms[0].getWestRoom();
+                case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(rooms[0], rooms[5]);
                 case "HELP", "H" -> getHelp();
                 case "EXIT", "X" -> endMessage();
                 default -> unknownCommand(menuOption);
@@ -71,12 +56,13 @@ public class Adventure {
             if (requestedRoom == null) {
                 System.out.println("That way is blocked.");
             } else {
-                currentRoom = requestedRoom;
+                rooms[0] = requestedRoom;
             }
         }
     }
 
-    //Help info, only with the short commands
+    //Help info - only with the short commands
+
     public static void getHelp() {
         System.out.println("\nYou can use these commands:");
         System.out.println("H - Help (this)");
@@ -89,12 +75,54 @@ public class Adventure {
     }
 
     //Give up
+
     public static void endMessage() {
         System.out.println("Really? Hope to see you again soon.");
     }
 
     //Invalid input
+
     public static void unknownCommand(String menuOption) {
         System.out.println("I do not understand \"" + menuOption + "\".");
+    }
+
+    public static void buildMap() {
+
+        //create all instances of rooms as an object array - data very basic
+
+        rooms[1] = new Room("Room 1", "Looks like an entrance.");
+        rooms[2] = new Room("Room 2", "Not much to see.");
+        rooms[3] = new Room("Room 3", "The way straight seems blocked");
+        rooms[4] = new Room("Room 4", "Looks empty");
+        rooms[5] = new Room("Room 5", "This room looks special.");
+        rooms[6] = new Room("Room 6", "You see nothing interesting");
+        rooms[7] = new Room("Room 7", "What is here?...Oh, nothing.");
+        rooms[8] = new Room("Room 8", "Seems to be several exits");
+        rooms[9] = new Room("Room 9", "No beer here");
+        rooms[0] = rooms[1]; //current room
+
+        //Make connections - auto 2 way
+
+        rooms[1].connectSouthNorth(rooms[4]);
+        rooms[1].connectEastWest(rooms[2]);
+        rooms[2].connectEastWest(rooms[3]);
+        rooms[3].connectSouthNorth(rooms[6]);
+        rooms[6].connectSouthNorth(rooms[9]);
+        rooms[8].connectEastWest(rooms[9]);
+        rooms[7].connectEastWest(rooms[8]);
+        rooms[5].connectSouthNorth(rooms[8]);
+        rooms[4].connectSouthNorth(rooms[7]);
+    }
+
+    //Easter egg - way to beat the game
+
+    public static String lookAround(Room currentRoom, Room special) {
+        if (currentRoom == special) {
+            System.out.println("\nCongratulations, you found the beer!");
+            return "X";
+        } else {
+            System.out.print("\nLooking around. ");
+            return "L";
+        }
     }
 }
