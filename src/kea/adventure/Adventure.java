@@ -4,8 +4,10 @@ import java.util.Scanner;
 
 public class Adventure {
 
-    private static final Room[] rooms = new Room[10];
+ //   private static final Room[] rooms = new Room[10];
     private static final Scanner input = new Scanner(System.in);
+
+    private Map map;
 
     public static void main(String[] args) {
 
@@ -14,17 +16,23 @@ public class Adventure {
            There could be a choice of maps - we have default
          **************************************************************************** */
         // hej med dig
-        buildMap();
+
+        Adventure game = new Adventure();
+        game.playGame();
 
         /* *******************************************************************
            Introduce game, process player inputs until game is closed - or won
            There could be a choice of starting locations - we have default
         ******************************************************************** */
 
-        playGame();
+
+    }
+    public Adventure() {
+        map = new Map();
+        map.buildMap();
     }
 
-    public static void playGame() {
+    public void playGame() {
 
         //Intro and description of start room
 
@@ -32,23 +40,24 @@ public class Adventure {
         System.out.println("Find the treasure or fail trying. How will it end...?");
 
         //Get inputs until user types exit or x or game is won
-
+Room currentRoom = map.getStarterRoom();
         String menuOption = "Z";
+        //Player.lookAround();
         while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
-            Room requestedRoom = rooms[0]; //used to only print blocked if user tries a blocked route
-            System.out.print("\n" + rooms[0].getRoomName() + ": ");
-            System.out.println(rooms[0].getRoomDescription());
+            Room requestedRoom = currentRoom; //used to only print blocked if user tries a blocked route
+            System.out.print("\n" + currentRoom.getRoomName() + ": ");
+            System.out.println(currentRoom.getRoomDescription());
             System.out.print("What do you want to do? ");
             menuOption = input.nextLine().toUpperCase();
 
             //player choice with multiple command forms
 
             switch (menuOption) {
-                case "GO NORTH", "NORTH", "N" -> requestedRoom = rooms[0].getNorthRoom(); //replace with player.goNorth
-                case "GO EAST", "EAST", "E" -> requestedRoom = rooms[0].getEastRoom(); //replace with player.goEast
-                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = rooms[0].getSouthRoom(); //replace with player.goSouth
-                case "GO WEST", "WEST", "W" -> requestedRoom = rooms[0].getWestRoom(); //replace with player.goWest
-                case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(rooms[0], rooms[5]); //replace with player.lookAround
+                case "GO NORTH", "NORTH", "N" -> requestedRoom = currentRoom.getNorthRoom(); //replace with player.goNorth
+                case "GO EAST", "EAST", "E" -> requestedRoom = currentRoom.getEastRoom(); //replace with player.goEast
+                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = currentRoom.getSouthRoom(); //replace with player.goSouth
+                case "GO WEST", "WEST", "W" -> requestedRoom = currentRoom.getWestRoom(); //replace with player.goWest
+                case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(currentRoom, map.getSpecialRoom());  //replace with player.lookAround
                 case "HELP", "H" -> getHelp();
                 case "EXIT", "X" -> endMessage();
                 default -> unknownCommand(menuOption);
@@ -56,7 +65,7 @@ public class Adventure {
             if (requestedRoom == null) {
                 System.out.println("That way is blocked.");
             } else {
-                rooms[0] = requestedRoom;
+                currentRoom = requestedRoom;
             }
         }
     }
@@ -83,12 +92,12 @@ public class Adventure {
     //Invalid input
 
     public static void unknownCommand(String menuOption) {
-        System.out.println("I do not understand \"" + menuOption + "\".");
+        System.out.println("I do not understan d \"" + menuOption + "\".");
     }
 
-    public static void buildMap() {
+    //public static void buildMap() {
 
-        //create all instances of rooms as an object array - data very basic
+        /*//create all instances of rooms as an object array - data very basic
 
         rooms[1] = new Room("Room 1", "Looks like an entrance.");
         rooms[2] = new Room("Room 2", "Not much to see.");
@@ -112,7 +121,7 @@ public class Adventure {
         rooms[7].connectEastWest(rooms[8]);
         rooms[5].connectSouthNorth(rooms[8]);
         rooms[4].connectSouthNorth(rooms[7]);
-    }
+    }*/
 
     //Easter egg - way to beat the game
 
