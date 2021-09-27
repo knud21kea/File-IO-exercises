@@ -13,7 +13,7 @@ public class Adventure {
            Initialise rooms and make connections (auto 2-way joins so no 1-way passages)
            There could be a choice of maps - we have default
          **************************************************************************** */
-
+        // hej med dig
         buildMap();
 
         /* *******************************************************************
