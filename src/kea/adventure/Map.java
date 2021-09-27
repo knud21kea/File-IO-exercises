@@ -8,7 +8,6 @@ public class Map {
 
         //create all instances of rooms as an object array - data very basic
 
-
         rooms[1] = new Room("Room 1", "Looks like an entrance.");
         rooms[2] = new Room("Room 2", "Not much to see.");
         rooms[3] = new Room("Room 3", "The way straight seems blocked");
