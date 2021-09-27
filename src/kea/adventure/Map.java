@@ -6,8 +6,8 @@ public class Map {
 
     public void buildMap() {
 
-        //create all instances of rooms as an object array - data very basic
-        //Rooms[0] is no longer used, but indicies are retained to match room IDs.
+        // Create all instances of rooms as an object array - data very basic
+        // Rooms[0] is no longer used, but indices are retained to match room IDs.
 
         rooms[1] = new Room("Room 1", "Looks like an entrance.");
         rooms[2] = new Room("Room 2", "Not much to see.");
@@ -19,7 +19,7 @@ public class Map {
         rooms[8] = new Room("Room 8", "Seems to be several exits");
         rooms[9] = new Room("Room 9", "No beer here");
 
-        //Make connections - auto 2 way
+        // Make connections - auto 2 way
 
         rooms[1].connectSouthNorth(rooms[4]);
         rooms[1].connectEastWest(rooms[2]);
@@ -32,9 +32,13 @@ public class Map {
         rooms[4].connectSouthNorth(rooms[7]);
     }
 
+    // Default start is in room 1
+
     public Room getStarterRoom() {
         return rooms[1];
     }
+
+    // Something special about room 5
 
     public Room getSpecialRoom() {
         return rooms[5];

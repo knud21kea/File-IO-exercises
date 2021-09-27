@@ -1,3 +1,5 @@
+// Only the player object knows which room he is in
+
 package kea.adventure;
 
 public class Player {
@@ -8,6 +10,8 @@ public class Player {
     public Player(Map map) {
         this.currentRoom = map.getStarterRoom();
     }
+
+    // Player moves in the given direction or finds the way blocked
 
     public Room changeRoom(String direction) {
         switch (direction) {

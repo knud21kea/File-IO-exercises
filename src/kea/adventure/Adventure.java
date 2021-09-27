@@ -1,3 +1,20 @@
+
+/* *************************************************************************************************
+
+                                   --  Adventure (part 1) --
+
+DAT21 Java project (compulsory group exercise).
+ Developers: Graham Heaven and Lasse Bøgeskov-Jensen, September 2021.
+
+A simple text-based adventure game inspired by "Colossal Cave Adventure",
+ by William Crowther and Don Woods, from 1976-1977.
+
+A single player navigates through a small maze of rooms using a simple text parser interface.
+In each room it is possible to get limited information about the room, and move to connected rooms.
+There is an achievable goal using the available commands.
+
+************************************************************************************************** */
+
 package kea.adventure;
 
 import java.util.Scanner;
@@ -16,11 +33,11 @@ public class Adventure {
 
     public Adventure() {
 
-        /* *****************************************************************************
-           Initialise rooms and make connections (auto 2-way joins so no 1-way passages)
-           There could be a choice of maps - we have default
-           Initialise player object - there could be a user input for player name
-         **************************************************************************** */
+        /*
+         Initialise rooms and make connections (auto 2-way joins so no 1-way passages)
+         There could be a choice of maps - we have default
+         Initialise player object - there could be a user input for player name
+         */
 
         map = new Map();
         map.buildMap();
@@ -29,17 +46,17 @@ public class Adventure {
 
     public void playGame() {
 
-        /* *******************************************************************
-           Introduce game, process player inputs until game is closed - or won
-           There could be a choice of starting locations - we have default
-        ******************************************************************** */
+        /*
+        Introduce game, process player inputs until game is closed - or won
+        There could be a choice of starting locations - we have default
+        */
 
         System.out.println("\nWelcome to this text based Adventure.");
         System.out.println("Find the treasure or fail trying. How will it end...?");
 
-        //Get inputs until user types exit or x or game is won
+        // Get inputs until user types exit/x or quit/q or game is won
 
-        String menuOption = "Z";
+        String menuOption = "START";
         while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
             Room requestedRoom = player.currentRoom; //used to only print blocked if user tries a blocked route
             System.out.print("\n" + player.currentRoom.getRoomName() + ": ");
@@ -47,7 +64,7 @@ public class Adventure {
             System.out.print("What do you want to do? ");
             menuOption = input.nextLine().toUpperCase();
 
-            //player choice with multiple command forms
+            // Player choice with multiple command forms
 
             switch (menuOption) {
                 case "GO NORTH", "NORTH", "N" -> requestedRoom = player.changeRoom("N");
@@ -55,8 +72,8 @@ public class Adventure {
                 case "GO SOUTH", "SOUTH", "S" -> requestedRoom = player.changeRoom("S");
                 case "GO WEST", "WEST", "W" -> requestedRoom = player.changeRoom("W");
                 case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(player.currentRoom, map.getSpecialRoom());
-                case "HELP", "H" -> getHelp();
-                case "EXIT", "X" -> endMessage();
+                case "HELP", "H", "INFO", "I" -> getHelp();
+                case "EXIT", "X", "QUIT", "Q" -> menuOption = endMessage();
                 default -> unknownCommand(menuOption);
             }
             if (requestedRoom == null) {
@@ -65,7 +82,7 @@ public class Adventure {
         }
     }
 
-    //Help info - only with the short commands
+    // Help info - only with the short commands
 
     public void getHelp() {
         System.out.println("\nYou can use these commands:");
@@ -78,25 +95,29 @@ public class Adventure {
         System.out.println("W - Go West");
     }
 
-    //Give up
+    // Give up
 
-    public void endMessage() {
-        System.out.println("Really? Hope to see you again soon.");
+    public String endMessage() {
+        System.out.print("\nAre you sure you want to quit? (y/n) ");
+        String menuOption = input.nextLine().toUpperCase();
+        if (menuOption.equals("YES") || menuOption.equals("Y")) {
+            System.out.println("Really? Hope to see you again soon. Bye.");
+            return "EXIT";
+        } else {
+            return "CONTINUE";
+        }
     }
 
-    //Invalid input
+    // Invalid input
 
     public void unknownCommand(String menuOption) {
-        System.out.println("I do not understan d \"" + menuOption + "\".");
+        System.out.println("I do not understand \"" + menuOption + "\".");
     }
 
-    //Easter egg - way to beat the game
+    // Room description with an Easter egg - a way to beat the game
 
     public String lookAround(Room currentRoom, Room special) {
-        if (currentRoom == special) {
-            System.out.println("\nCongratulations, you found the beer!");
-            return "X";
-        } else {
+        if (currentRoom != special) {
             System.out.println("\nLooking around. ");
             if (currentRoom.getKnownNorth() && currentRoom.getNorthRoom() == null) {
                 System.out.println("The way North is blocked.");
@@ -110,7 +131,10 @@ public class Adventure {
             if (currentRoom.getKnownWest() && currentRoom.getWestRoom() == null) {
                 System.out.println("The way West is blocked.");
             }
-            return "L";
+            return "CONTINUE";
+        } else {
+            System.out.println("\nCongratulations, you found the beer!");
+            return "EXIT";
         }
     }
 }

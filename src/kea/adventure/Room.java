@@ -2,7 +2,8 @@ package kea.adventure;
 
 public class Room {
 
-    // known attribute is used to update room description when a direction has been tried and found blocked
+    // "known" attribute is used to update room description when a direction has been tried and found blocked
+
     private final String roomName, roomDescription;
     private Room north, east, west, south;
     private boolean knownNorth, knownEast, knownSouth, knownWest;
@@ -21,16 +22,20 @@ public class Room {
     }
 
     // connect two rooms South to North
+
     public void connectSouthNorth(Room south) {
         this.south = south;
         south.north = this;
     }
 
     // connect two rooms East to West
+
     public void connectEastWest(Room east) {
         this.east = east;
         east.west = this;
     }
+
+    // 4 methods to find a room in the given direction and note that the player has now tried to go there
 
     public Room getNorthRoom() {
         this.knownNorth = true;
@@ -51,6 +56,8 @@ public class Room {
         this.knownWest = true;
         return west;
     }
+
+    // 4 methods to check if the player has previously tried to go the given direction
 
     public boolean getKnownNorth() {
         return knownNorth;
