@@ -85,7 +85,7 @@ public class Adventure {
     // Help info - only with the short commands
 
     public void getHelp() {
-        System.out.println("\nYou can use these commands:");
+        System.out.println("\nYou can use these commands, with some variations:");
         System.out.println("H - Help (this - see what I did there?)");
         System.out.println("L - Look around (room description - always worth a try)");
         System.out.println("X - Exit");
@@ -133,7 +133,7 @@ public class Adventure {
             }
             return "CONTINUE";
         } else {
-            System.out.println("\nCongratulations, you found the beer!");
+            System.out.println("\nCongratulations, you have found the sleeping Holge Danske in his Kronborg home.");
             return "EXIT";
         }
     }

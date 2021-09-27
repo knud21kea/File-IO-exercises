@@ -9,15 +9,15 @@ public class Map {
         // Create all instances of rooms as an object array - data very basic
         // Rooms[0] is no longer used, but indices are retained to match room IDs.
 
-        rooms[1] = new Room("Room 1", "Looks like an entrance.");
-        rooms[2] = new Room("Room 2", "Not much to see.");
-        rooms[3] = new Room("Room 3", "The way straight seems blocked");
-        rooms[4] = new Room("Room 4", "Looks empty");
-        rooms[5] = new Room("Room 5", "This room looks special.");
-        rooms[6] = new Room("Room 6", "You see nothing interesting");
-        rooms[7] = new Room("Room 7", "What is here?...Oh, nothing.");
-        rooms[8] = new Room("Room 8", "Seems to be several exits");
-        rooms[9] = new Room("Room 9", "No beer here");
+        rooms[1] = new Room("Courtyard", "Walls here are clad with sandstone, and the surrounding roofs with copper sheeting.");
+        rooms[2] = new Room("Chancellery", "A luxurious room with a magnificent canopy which is woven in gold and silver.");
+        rooms[3] = new Room("Ballroom", "A great hall where the loft is panelled with elaborate wood carvings, paintings and gilding.");
+        rooms[4] = new Room("Banquet room", "Polished silver and sparkling glass. Brass chandeliers fitted with honey-scented candles.");
+        rooms[5] = new Room("Catacomb", "Dark and foreboding with a brooding presence. A special place.");
+        rooms[6] = new Room("Royal apartments", "A richly decorated room with ceiling paintings, stone portals and fireplaces.");
+        rooms[7] = new Room("Little hall", "The walls are clad with seven intricately woven tapestries.");
+        rooms[8] = new Room("Casements", "Gloomy, cold and damp. There are signs that horses and soldiers have been here.");
+        rooms[9] = new Room("Chapel", "A small place of worship with well preserved original altar, gallery, and pews.");
 
         // Make connections - auto 2 way
 
