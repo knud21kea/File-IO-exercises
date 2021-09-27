@@ -44,11 +44,11 @@ public class Adventure {
             //player choice with multiple command forms
 
             switch (menuOption) {
-                case "GO NORTH", "NORTH", "N" -> requestedRoom = rooms[0].getNorthRoom();
-                case "GO EAST", "EAST", "E" -> requestedRoom = rooms[0].getEastRoom();
-                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = rooms[0].getSouthRoom();
-                case "GO WEST", "WEST", "W" -> requestedRoom = rooms[0].getWestRoom();
-                case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(rooms[0], rooms[5]);
+                case "GO NORTH", "NORTH", "N" -> requestedRoom = rooms[0].getNorthRoom(); //replace with player.goNorth
+                case "GO EAST", "EAST", "E" -> requestedRoom = rooms[0].getEastRoom(); //replace with player.goEast
+                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = rooms[0].getSouthRoom(); //replace with player.goSouth
+                case "GO WEST", "WEST", "W" -> requestedRoom = rooms[0].getWestRoom(); //replace with player.goWest
+                case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(rooms[0], rooms[5]); //replace with player.lookAround
                 case "HELP", "H" -> getHelp();
                 case "EXIT", "X" -> endMessage();
                 default -> unknownCommand(menuOption);
@@ -65,8 +65,8 @@ public class Adventure {
 
     public static void getHelp() {
         System.out.println("\nYou can use these commands:");
-        System.out.println("H - Help (this)");
-        System.out.println("L - Look around (room description)");
+        System.out.println("H - Help (this - see what I did there?)");
+        System.out.println("L - Look around (room description - always worth a try)");
         System.out.println("X - Exit");
         System.out.println("N - Go North");
         System.out.println("E - Go East");
@@ -121,7 +121,19 @@ public class Adventure {
             System.out.println("\nCongratulations, you found the beer!");
             return "X";
         } else {
-            System.out.print("\nLooking around. ");
+            System.out.println("\nLooking around. ");
+            if (currentRoom.getKnownNorth() && currentRoom.getNorthRoom() == null) {
+                System.out.println("The way North is blocked.");
+            }
+            if (currentRoom.getKnownEast() && currentRoom.getEastRoom() == null) {
+                System.out.println("The way East is blocked.");
+            }
+            if (currentRoom.getKnownSouth() && currentRoom.getSouthRoom() == null) {
+                System.out.println("The way South is blocked.");
+            }
+            if (currentRoom.getKnownWest() && currentRoom.getWestRoom() == null) {
+                System.out.println("The way West is blocked.");
+            }
             return "L";
         }
     }

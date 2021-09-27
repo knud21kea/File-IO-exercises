@@ -2,12 +2,9 @@ package kea.adventure;
 
 public class Room {
 
-    private Room north;
-    private Room east;
-    private Room west;
-    private Room south;
-    private final String roomName;
-    private final String roomDescription;
+    private final String roomName, roomDescription;
+    private Room north, east, west, south;
+    private boolean knownNorth, knownEast, knownSouth, knownWest;
 
     public Room(String roomName, String roomDescription) {
         this.roomName = roomName;
@@ -23,18 +20,22 @@ public class Room {
     }
 
     public Room getNorthRoom() {
+        this.knownNorth = true;
         return north;
     }
 
     public Room getEastRoom() {
+        this.knownEast = true;
         return east;
     }
 
     public Room getSouthRoom() {
+        this.knownSouth = true;
         return south;
     }
 
     public Room getWestRoom() {
+        this.knownWest = true;
         return west;
     }
 
@@ -47,4 +48,37 @@ public class Room {
         this.east = east;
         east.west = this;
     }
+
+    public boolean getKnownNorth() {
+        return knownNorth;
+    }
+
+    public void setKnownNorth() {
+        this.knownNorth = true;
+    }
+
+    public boolean getKnownEast() {
+        return knownEast;
+    }
+
+    public void setKnownEast() {
+        this.knownEast = true;
+    }
+
+    public boolean getKnownSouth() {
+        return knownSouth;
+    }
+
+    public void setKnownSouth() {
+        knownSouth = true;
+    }
+
+    public boolean getKnownWest() {
+        return knownWest;
+    }
+
+    public void setKnownWest() {
+        this.knownWest = true;
+    }
+
 }
