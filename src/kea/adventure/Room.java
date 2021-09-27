@@ -53,32 +53,15 @@ public class Room {
         return knownNorth;
     }
 
-    public void setKnownNorth() {
-        this.knownNorth = true;
-    }
-
     public boolean getKnownEast() {
         return knownEast;
-    }
-
-    public void setKnownEast() {
-        this.knownEast = true;
     }
 
     public boolean getKnownSouth() {
         return knownSouth;
     }
 
-    public void setKnownSouth() {
-        knownSouth = true;
-    }
-
     public boolean getKnownWest() {
         return knownWest;
     }
-
-    public void setKnownWest() {
-        this.knownWest = true;
-    }
-
 }
