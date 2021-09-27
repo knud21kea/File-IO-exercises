@@ -9,7 +9,7 @@ public class Player {
         this.currentRoom = map.getStarterRoom();
     }
 
-    public Room go(String direction) {
+    public Room changeRoom(String direction) {
         switch (direction) {
             case "N" -> requestedRoom = this.currentRoom.getNorthRoom();
             case "E" -> requestedRoom = this.currentRoom.getEastRoom();
@@ -17,9 +17,9 @@ public class Player {
             case "W" -> requestedRoom = this.currentRoom.getWestRoom();
         }
         if (requestedRoom != null) {
-            this.currentRoom = requestedRoom;
+            this.currentRoom = requestedRoom; // move to new room
         }
-        return requestedRoom;
+        return requestedRoom; // or print blocked message if null
     }
 }
 

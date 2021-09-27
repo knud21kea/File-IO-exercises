@@ -2,11 +2,12 @@ package kea.adventure;
 
 public class Map {
 
-    private Room[] rooms = new Room[10];
+    private final Room[] rooms = new Room[10];
 
     public void buildMap() {
 
         //create all instances of rooms as an object array - data very basic
+        //Rooms[0] is no longer used, but indicies are retained to match room IDs.
 
         rooms[1] = new Room("Room 1", "Looks like an entrance.");
         rooms[2] = new Room("Room 2", "Not much to see.");
@@ -17,7 +18,6 @@ public class Map {
         rooms[7] = new Room("Room 7", "What is here?...Oh, nothing.");
         rooms[8] = new Room("Room 8", "Seems to be several exits");
         rooms[9] = new Room("Room 9", "No beer here");
-      //  rooms[0] = rooms[1]; //current room
 
         //Make connections - auto 2 way
 

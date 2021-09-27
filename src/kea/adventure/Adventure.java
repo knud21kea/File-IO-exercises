@@ -4,31 +4,24 @@ import java.util.Scanner;
 
 public class Adventure {
 
-    //   private static final Room[] rooms = new Room[10];
     private static final Scanner input = new Scanner(System.in);
-
     private final Map map;
     private final Player player;
 
     public static void main(String[] args) {
 
-        /* *****************************************************************************
-           Initialise rooms and make connections (auto 2-way joins so no 1-way passages)
-           There could be a choice of maps - we have default
-         **************************************************************************** */
-
         Adventure game = new Adventure();
         game.playGame();
-
-        /* *******************************************************************
-           Introduce game, process player inputs until game is closed - or won
-           There could be a choice of starting locations - we have default
-        ******************************************************************** */
-
-
     }
 
     public Adventure() {
+
+        /* *****************************************************************************
+           Initialise rooms and make connections (auto 2-way joins so no 1-way passages)
+           There could be a choice of maps - we have default
+           Initialise player object - there could be a user input for player name
+         **************************************************************************** */
+
         map = new Map();
         map.buildMap();
         player = new Player(map);
@@ -36,15 +29,17 @@ public class Adventure {
 
     public void playGame() {
 
-        //Intro and description of start room
+        /* *******************************************************************
+           Introduce game, process player inputs until game is closed - or won
+           There could be a choice of starting locations - we have default
+        ******************************************************************** */
 
         System.out.println("\nWelcome to this text based Adventure.");
         System.out.println("Find the treasure or fail trying. How will it end...?");
 
         //Get inputs until user types exit or x or game is won
-        Room currentRoom = map.getStarterRoom();
+
         String menuOption = "Z";
-        //Player.lookAround();
         while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
             Room requestedRoom = player.currentRoom; //used to only print blocked if user tries a blocked route
             System.out.print("\n" + player.currentRoom.getRoomName() + ": ");
@@ -55,10 +50,10 @@ public class Adventure {
             //player choice with multiple command forms
 
             switch (menuOption) {
-                case "GO NORTH", "NORTH", "N" -> requestedRoom = player.go("N");
-                case "GO EAST", "EAST", "E" -> requestedRoom = player.go("E");
-                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = player.go("S");
-                case "GO WEST", "WEST", "W" -> requestedRoom = player.go("W");
+                case "GO NORTH", "NORTH", "N" -> requestedRoom = player.changeRoom("N");
+                case "GO EAST", "EAST", "E" -> requestedRoom = player.changeRoom("E");
+                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = player.changeRoom("S");
+                case "GO WEST", "WEST", "W" -> requestedRoom = player.changeRoom("W");
                 case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(player.currentRoom, map.getSpecialRoom());
                 case "HELP", "H" -> getHelp();
                 case "EXIT", "X" -> endMessage();
