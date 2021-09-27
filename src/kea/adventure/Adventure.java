@@ -55,10 +55,10 @@ public class Adventure {
             //player choice with multiple command forms
 
             switch (menuOption) {
-                case "GO NORTH", "NORTH", "N" -> requestedRoom = player.goNorth();
-                case "GO EAST", "EAST", "E" -> requestedRoom = player.goEast();
-                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = player.goSouth();
-                case "GO WEST", "WEST", "W" -> requestedRoom = player.goWest();
+                case "GO NORTH", "NORTH", "N" -> requestedRoom = player.go("N");
+                case "GO EAST", "EAST", "E" -> requestedRoom = player.go("E");
+                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = player.go("S");
+                case "GO WEST", "WEST", "W" -> requestedRoom = player.go("W");
                 case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(player.currentRoom, map.getSpecialRoom());
                 case "HELP", "H" -> getHelp();
                 case "EXIT", "X" -> endMessage();

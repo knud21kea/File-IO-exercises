@@ -9,35 +9,17 @@ public class Player {
         this.currentRoom = map.getStarterRoom();
     }
 
-    public Room goNorth() {
-        requestedRoom = this.currentRoom.getNorthRoom();
-        if (requestedRoom != null) {
-            this.currentRoom = requestedRoom;
+    public Room go(String direction) {
+        switch (direction) {
+            case "N" -> requestedRoom = this.currentRoom.getNorthRoom();
+            case "E" -> requestedRoom = this.currentRoom.getEastRoom();
+            case "S" -> requestedRoom = this.currentRoom.getSouthRoom();
+            case "W" -> requestedRoom = this.currentRoom.getWestRoom();
         }
-        return requestedRoom;
-    }
-
-    public Room goEast() {
-        requestedRoom = this.currentRoom.getEastRoom();
-        if (requestedRoom != null) {
-            this.currentRoom = requestedRoom;
-        }
-        return requestedRoom;
-    }
-
-    public Room goSouth() {
-        requestedRoom = this.currentRoom.getSouthRoom();
-        if (requestedRoom != null) {
-            this.currentRoom = requestedRoom;
-        }
-        return requestedRoom;
-    }
-
-    public Room goWest() {
-        requestedRoom = this.currentRoom.getWestRoom();
         if (requestedRoom != null) {
             this.currentRoom = requestedRoom;
         }
         return requestedRoom;
     }
 }
+
