@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Adventure {
 
-    private static final Scanner input = new Scanner(System.in);
+    private final Scanner input = new Scanner(System.in);
     private final Map map;
     private final Player player;
 
