@@ -6,7 +6,7 @@ public class Map {
 
     public void buildMap() {
 
-        // Create all instances of rooms as an object array - data very basic
+        // Create all instances of rooms as an object array
         // Rooms[0] is no longer used, but indices are retained to match room IDs.
 
         rooms[1] = new Room("Courtyard", "Walls here are clad with sandstone, and the surrounding roofs with copper sheeting.");
@@ -14,7 +14,7 @@ public class Map {
         rooms[3] = new Room("Ballroom", "A great hall where the loft is panelled with elaborate wood carvings, paintings and gilding.");
         rooms[4] = new Room("Banquet room", "Polished silver and sparkling glass. Brass chandeliers fitted with honey-scented candles.");
         rooms[5] = new Room("Catacomb", "Dark and foreboding with a brooding presence. A special place.");
-        rooms[6] = new Room("Royal apartments", "A richly decorated room with ceiling paintings, stone portals and fireplaces.");
+        rooms[6] = new Room("Royal apartment", "A richly decorated room with ceiling paintings, stone portals and fireplaces.");
         rooms[7] = new Room("Little hall", "The walls are clad with seven intricately woven tapestries.");
         rooms[8] = new Room("Casements", "Gloomy, cold and damp. There are signs that horses and soldiers have been here.");
         rooms[9] = new Room("Chapel", "A small place of worship with well preserved original altar, gallery, and pews.");
