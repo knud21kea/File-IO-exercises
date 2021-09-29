@@ -13,7 +13,7 @@ public class Player {
 
     // Player moves in the given direction or finds the way blocked
 
-    public Room changeRoom(String direction) {
+    public boolean changeRoom(String direction) {
         switch (direction) {
             case "N" -> requestedRoom = this.currentRoom.getNorthRoom();
             case "E" -> requestedRoom = this.currentRoom.getEastRoom();
@@ -22,8 +22,9 @@ public class Player {
         }
         if (requestedRoom != null) {
             this.currentRoom = requestedRoom; // move to new room
+            return true;
         }
-        return requestedRoom; // or print blocked message if null
+        return false;
     }
 }
 

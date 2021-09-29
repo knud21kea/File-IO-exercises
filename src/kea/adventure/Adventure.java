@@ -17,6 +17,7 @@ There is an achievable goal using the available commands.
 
 package kea.adventure;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Adventure {
@@ -41,6 +42,7 @@ public class Adventure {
 
         map = new Map();
         map.buildMap();
+        map.addStarterItems();
         player = new Player(map);
     }
 
@@ -52,31 +54,34 @@ public class Adventure {
         */
 
         System.out.println("\nWelcome to this text based Adventure.");
-        System.out.println("Find the treasure or fail trying. How will it end...?");
+        System.out.println("You can try to move North, East, South or West");
+        System.out.println("It is also possible, nae recommended, to explore your current location. You may find blocked directions, or items lying around.");
+        System.out.println("Only the weak would think of quitting, but that is always an option.");
+        System.out.println("To see a list of available commands type help. Maybe try that now?");
+        System.out.println("\nFind the long lost hero or fail trying. How will it end...?");
 
         // Get inputs until user types exit/x or quit/q or game is won
 
         String menuOption = "START";
         while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
-            Room requestedRoom = player.currentRoom; //used to only print blocked if user tries a blocked route
-            System.out.print("\n" + player.currentRoom.getRoomName() + ": ");
-            System.out.println(player.currentRoom.getRoomDescription());
+            outputBasicDescription();
+            boolean canMove = true; //used to only print blocked if user tries a blocked route
             System.out.print("What do you want to do? ");
             menuOption = input.nextLine().toUpperCase();
 
             // Player choice with multiple command forms
 
             switch (menuOption) {
-                case "GO NORTH", "NORTH", "N" -> requestedRoom = player.changeRoom("N");
-                case "GO EAST", "EAST", "E" -> requestedRoom = player.changeRoom("E");
-                case "GO SOUTH", "SOUTH", "S" -> requestedRoom = player.changeRoom("S");
-                case "GO WEST", "WEST", "W" -> requestedRoom = player.changeRoom("W");
+                case "GO NORTH", "NORTH", "N" -> canMove = player.changeRoom("N");
+                case "GO EAST", "EAST", "E" -> canMove = player.changeRoom("E");
+                case "GO SOUTH", "SOUTH", "S" -> canMove = player.changeRoom("S");
+                case "GO WEST", "WEST", "W" -> canMove = player.changeRoom("W");
                 case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(player.currentRoom, map.getSpecialRoom());
                 case "HELP", "H", "INFO", "I" -> getHelp();
                 case "EXIT", "X", "QUIT", "Q" -> menuOption = endMessage();
                 default -> unknownCommand(menuOption);
             }
-            if (requestedRoom == null) {
+            if (!canMove) {
                 System.out.println("That way is blocked.");
             }
         }
@@ -131,10 +136,32 @@ public class Adventure {
             if (currentRoom.getKnownWest() && currentRoom.getWestRoom() == null) {
                 System.out.println("The way West is blocked.");
             }
+            outputDescription();
             return "CONTINUE";
         } else {
             System.out.println("\nCongratulations, you have found the sleeping Holge Danske in his Kronborg home.");
             return "EXIT";
         }
+    }
+
+    public void outputDescription() {
+        ArrayList<Item> objects = player.currentRoom.getRoomItems();
+        int size = objects.size();
+        System.out.print("You can see ");
+        if (size == 0) {
+            System.out.println("nothing of interest.");
+        } else if (size == 1) {
+            System.out.println("1 object:\n" + objects.get(0).getItemName());
+        } else {
+            System.out.println(size + " objects:");
+            for (int i = 0; i < size; i++) {
+                System.out.println(objects.get(i).getItemName());
+            }
+        }
+    }
+
+    public void outputBasicDescription() {
+        System.out.print("\nYou are in " + player.currentRoom.getRoomName() + ": ");
+        System.out.println(player.currentRoom.getRoomDescription());
     }
 }

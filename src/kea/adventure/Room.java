@@ -1,5 +1,8 @@
 package kea.adventure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Room {
 
     // "known" attribute is used to update room description when a direction has been tried and found blocked
@@ -7,6 +10,8 @@ public class Room {
     private final String roomName, roomDescription;
     private Room north, east, west, south;
     private boolean knownNorth, knownEast, knownSouth, knownWest;
+    public ArrayList<Item> items = new ArrayList<>(); // List of Item objects that are in the room
+
 
     public Room(String roomName, String roomDescription) {
         this.roomName = roomName;
@@ -19,6 +24,15 @@ public class Room {
 
     public String getRoomDescription() {
         return roomDescription;
+    }
+
+    public ArrayList<Item> getRoomItems() {
+        return this.items;
+    }
+
+    // Add item to room
+    public void addItemToRoom(Item item) {
+        this.items.add(item);
     }
 
     // connect two rooms South to North
@@ -73,5 +87,12 @@ public class Room {
 
     public boolean getKnownWest() {
         return knownWest;
+    }
+
+    @Override
+    public String toString() {
+        return roomName + "{" +
+                "items=" + items +
+                '}';
     }
 }
