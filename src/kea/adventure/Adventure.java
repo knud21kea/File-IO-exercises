@@ -53,15 +53,20 @@ public class Adventure {
         There could be a choice of starting locations - we have default
         */
 
-        System.out.println("\033[0;33m\nWelcome to this text based Adventure.");
-        System.out.println("You can try to move North, East, South or West");
-        System.out.println("It is also possible, nae recommended, to explore your current location. You may find blocked directions, or items lying around.");
-        System.out.println("Only the weak would think of quitting, but that is always an option.");
-        System.out.println("To see a list of available commands type help. Maybe try that now?");
-        System.out.println("\nFind the long lost hero or fail trying. How will it end...?\033[0m");
+        System.out.println("""
+                \033[0;33m
+                Welcome to this text based Adventure.
+                You can try to move North, East, South or West
+                It is also possible, nae recommended, to explore your current location. You may find blocked directions, or items lying around.
+                Only the weak would think of quitting, but that is always an option.
+                To see a list of available commands type help. Maybe try that now?
+                        
+                Find the long lost hero or fail trying. How will it end...?\033[0m
+                Press a key to start the aventure""");
 
         // Get inputs until user types exit/x or quit/q or game is won
 
+        input.nextLine();
         String menuOption = "START";
         while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
             outputBasicDescription();
@@ -105,10 +110,10 @@ public class Adventure {
     // Give up
 
     public String endMessage() {
-        System.out.print("\nAre you sure you want to quit? (y/n) ");
+        System.out.print("\033[0;33m\nAre you sure you want to quit? (y/n)\033[0m ");
         String menuOption = input.nextLine().toUpperCase();
-        if (menuOption.equals("YES") || menuOption.equals("Y")) {
-            System.out.println("Really? Hope to see you again soon. Bye.");
+        if (menuOption.startsWith("Y")) {
+            System.out.println("\033[0;33mReally? Hope to see you again soon. Bye.\033[0m");
             return "EXIT";
         } else {
             return "CONTINUE";
@@ -118,7 +123,7 @@ public class Adventure {
     // Invalid input
 
     public void unknownCommand(String menuOption) {
-        System.out.println("I do not understand \"" + menuOption + "\".");
+        System.out.println("\033[0;33mI do not understand \"" + menuOption + "\".\033[0m");
     }
 
     // Room description with an Easter egg - a way to beat the game

@@ -1,7 +1,6 @@
 package kea.adventure;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Room {
 
