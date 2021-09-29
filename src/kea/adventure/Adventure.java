@@ -1,7 +1,7 @@
 
 /* *************************************************************************************************
 
-                                   --  Adventure (part 1) --
+                                   --  Adventure (part 2) --
 
 DAT21 Java project (compulsory group exercise).
  Developers: Graham Heaven and Lasse Bøgeskov-Jensen, September 2021.
@@ -44,6 +44,8 @@ public class Adventure {
         map.buildMap();
         map.addStarterItems();
         player = new Player(map);
+
+
     }
 
     public void playGame() {
@@ -59,15 +61,21 @@ public class Adventure {
                 You can try to move North, East, South or West
                 It is also possible, nae recommended, to explore your current location. You may find blocked directions, or items lying around.
                 Only the weak would think of quitting, but that is always an option.
-                To see a list of available commands type help. Maybe try that now?
+                To see a list of available commands type help.
                         
-                Find the long lost hero or fail trying. How will it end...?\033[0m
-                Press a key to start the aventure""");
+                Find the long lost hero or fail trying. How will it end...?\033[0m""");
 
+        // Start game or exit
+
+        System.out.print("Are you ready to start the adventure? ");
+        String menuOption = input.nextLine().toUpperCase();
+        if (!menuOption.startsWith("Y")) {
+            menuOption = "X";
+        } else {
+            menuOption = "START";
+        }
         // Get inputs until user types exit/x or quit/q or game is won
 
-        input.nextLine();
-        String menuOption = "START";
         while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
             outputBasicDescription();
             boolean canMove = true; //used to only print blocked if user tries a blocked route
@@ -77,13 +85,14 @@ public class Adventure {
             // Player choice with multiple command forms
 
             switch (menuOption) {
+                case "EXIT", "X", "QUIT", "Q" -> menuOption = endMessage();
+                case "HELP", "H", "INFO" -> getHelp();
+                case "INVENTORY", "INV", "I" -> outputInventory();
+                case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(player.currentRoom, map.getSpecialRoom());
                 case "GO NORTH", "NORTH", "N" -> canMove = player.changeRoom("N");
                 case "GO EAST", "EAST", "E" -> canMove = player.changeRoom("E");
                 case "GO SOUTH", "SOUTH", "S" -> canMove = player.changeRoom("S");
                 case "GO WEST", "WEST", "W" -> canMove = player.changeRoom("W");
-                case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(player.currentRoom, map.getSpecialRoom());
-                case "HELP", "H", "INFO", "I" -> getHelp();
-                case "EXIT", "X", "QUIT", "Q" -> menuOption = endMessage();
                 default -> unknownCommand(menuOption);
             }
             if (!canMove) {
@@ -100,11 +109,12 @@ public class Adventure {
         You can use these commands, with some variations:
         H - Help (this - see what I did there?)
         L - Look around (room description - always worth a try
-        X - Exit
+        I - List inventory
         N - Go North
         E - Go East
         S - Go South
-        W - Go West\033[0m""");
+        W - Go West
+        X - Exit\033[0m""");
     }
 
     // Give up
@@ -151,26 +161,50 @@ public class Adventure {
         }
     }
 
+    public void outputBasicDescription() {
+        System.out.print("\nYou are in " + player.currentRoom.getRoomName() + ": ");
+        System.out.println(player.currentRoom.getRoomDescription());
+    }
+
+    public void outputInventory() {
+        System.out.print("\033[0;34m");
+        ArrayList<Item> objects = player.getPlayerItems();
+        int size = objects.size();
+        System.out.print("You are carrying ");
+        if (size == 0) {
+            System.out.print("nothing of use.");
+        } else if (size == 1) {
+            System.out.print("1 item: " + objects.get(0).getItemName() + ".");
+        } else {
+            System.out.print(size + " items: " + objects.get(0).getItemName());
+            for (int i = 1; i < size - 1; i++) {
+                System.out.print(", " + makeFirstLetterLowerCase(objects.get(i).getItemName()));
+            }
+            System.out.println(" and " + makeFirstLetterLowerCase(objects.get(size - 1).getItemName()) + ".");
+        }
+        System.out.print("\033[0m");
+    }
+
     public void outputDescription() {
         System.out.print("\033[0;34m");
         ArrayList<Item> objects = player.currentRoom.getRoomItems();
         int size = objects.size();
         System.out.print("You can see ");
         if (size == 0) {
-            System.out.println("nothing of interest.");
+            System.out.print("nothing of interest.");
         } else if (size == 1) {
-            System.out.println("1 object:\n" + objects.get(0).getItemName());
+            System.out.print("1 item: " + objects.get(0).getItemName() + ".");
         } else {
-            System.out.println(size + " objects:");
-            for (int i = 0; i < size; i++) {
-                System.out.println(objects.get(i).getItemName());
+            System.out.print(size + " items: " + objects.get(0).getItemName());
+            for (int i = 1; i < size - 1; i++) {
+                System.out.print(", " + makeFirstLetterLowerCase(objects.get(i).getItemName()));
             }
+            System.out.println(" and " + makeFirstLetterLowerCase(objects.get(size - 1).getItemName()) + ".");
         }
         System.out.print("\033[0m");
     }
 
-    public void outputBasicDescription() {
-        System.out.print("\nYou are in " + player.currentRoom.getRoomName() + ": ");
-        System.out.println(player.currentRoom.getRoomDescription());
+    public String makeFirstLetterLowerCase(String itemName) {
+        return itemName.substring(0,1).toLowerCase() + itemName.substring(1);
     }
 }

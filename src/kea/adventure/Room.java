@@ -9,7 +9,7 @@ public class Room {
     private final String roomName, roomDescription;
     private Room north, east, west, south;
     private boolean knownNorth, knownEast, knownSouth, knownWest;
-    public ArrayList<Item> items = new ArrayList<>(); // List of Item objects that are in the room
+    private ArrayList<Item> items = new ArrayList<>(); // List of Item objects that are in the room
 
 
     public Room(String roomName, String roomDescription) {

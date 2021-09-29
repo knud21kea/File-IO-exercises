@@ -16,9 +16,15 @@
 
 package kea.adventure;
 
+import java.util.ArrayList;
+
 public class Map {
 
-    private Room courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel;
+    public Room courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel;
+    //public Player player;
+    public ArrayList<Item> startInventory = new ArrayList<>();
+
+
 
     public Map() {
     }
@@ -54,15 +60,18 @@ public class Map {
 
         // Create all instances of Item class
 
-        Item brassLamp = new Item("A brass lamp", 1);
-        Item smallKnife = new Item("A small knife", 1);
-        Item emptyBottle = new Item("An empty bottle", 1);
+        Item brassLamp = new Item("A brass lamp", 15);
+        Item smallKnife = new Item("A small knife", 5);
+        Item emptyBottle = new Item("An empty bottle", 5);
         Item silverKey = new Item("A silver key", 1);
         Item goldKey = new Item("A gold key", 1);
-        Item goldBar = new Item("A gold bar", 1);
-        Item anApple = new Item("An apple", 1);
-        Item holyWater = new Item("Some holy water", 1);
-        Item oldParchment = new Item("An old parchment", 1);
+        Item goldBar = new Item("A gold bar", 20);
+        Item anApple = new Item("An apple", 5);
+        Item holyWater = new Item("Some holy water", 10);
+        Item oldParchment = new Item("An old parchment", 2);
+        Item magneticCompass = new Item("A magnetic compass", 5);
+        Item boxOfMatches = new Item("A box of matches", 5);
+        Item paperClip = new Item("A paper clip", 0);
 
         // Place items in rooms
 
@@ -75,6 +84,10 @@ public class Map {
         apartment.addItemToRoom(goldKey);
         hall.addItemToRoom(oldParchment);
         chapel.addItemToRoom(holyWater);
+
+        startInventory.add(magneticCompass);
+        startInventory.add(boxOfMatches);
+        startInventory.add(paperClip);
     }
 
     // Default start is in room 1
@@ -88,4 +101,11 @@ public class Map {
     public Room getSpecialRoom() {
         return catacombs;
     }
-}
+
+    // Testing inventory. Probably should start without items.
+
+    public ArrayList<Item> getInitialInventory() {
+        return startInventory;
+        }
+    }
+

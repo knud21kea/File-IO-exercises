@@ -2,13 +2,17 @@
 
 package kea.adventure;
 
+import java.util.ArrayList;
+
 public class Player {
 
     public Room currentRoom;
     private Room requestedRoom;
+    private ArrayList itemsPlayer; // Player inventory
 
     public Player(Map map) {
         this.currentRoom = map.getStarterRoom();
+        this.itemsPlayer = map.getInitialInventory();
     }
 
     // Player moves in the given direction or finds the way blocked
@@ -26,5 +30,10 @@ public class Player {
         }
         return false;
     }
+
+    public ArrayList getPlayerItems() {
+        return this.itemsPlayer;
+    }
 }
+
 
