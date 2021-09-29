@@ -53,12 +53,12 @@ public class Adventure {
         There could be a choice of starting locations - we have default
         */
 
-        System.out.println("\nWelcome to this text based Adventure.");
+        System.out.println("\033[0;33m\nWelcome to this text based Adventure.");
         System.out.println("You can try to move North, East, South or West");
         System.out.println("It is also possible, nae recommended, to explore your current location. You may find blocked directions, or items lying around.");
         System.out.println("Only the weak would think of quitting, but that is always an option.");
         System.out.println("To see a list of available commands type help. Maybe try that now?");
-        System.out.println("\nFind the long lost hero or fail trying. How will it end...?");
+        System.out.println("\nFind the long lost hero or fail trying. How will it end...?\033[0m");
 
         // Get inputs until user types exit/x or quit/q or game is won
 
@@ -82,7 +82,7 @@ public class Adventure {
                 default -> unknownCommand(menuOption);
             }
             if (!canMove) {
-                System.out.println("That way is blocked.");
+                System.out.println("\033[0;31mThat way is blocked.\033[0m");
             }
         }
     }
@@ -90,14 +90,16 @@ public class Adventure {
     // Help info - only with the short commands
 
     public void getHelp() {
-        System.out.println("\nYou can use these commands, with some variations:");
-        System.out.println("H - Help (this - see what I did there?)");
-        System.out.println("L - Look around (room description - always worth a try)");
-        System.out.println("X - Exit");
-        System.out.println("N - Go North");
-        System.out.println("E - Go East");
-        System.out.println("S - Go South");
-        System.out.println("W - Go West");
+        System.out.println("""
+        \033[0;33m
+        You can use these commands, with some variations:
+        H - Help (this - see what I did there?)
+        L - Look around (room description - always worth a try
+        X - Exit
+        N - Go North
+        E - Go East
+        S - Go South
+        W - Go West\033[0m""");
     }
 
     // Give up
@@ -123,18 +125,18 @@ public class Adventure {
 
     public String lookAround(Room currentRoom, Room special) {
         if (currentRoom != special) {
-            System.out.println("\nLooking around. ");
+            System.out.println("\nLooking around.");
             if (currentRoom.getKnownNorth() && currentRoom.getNorthRoom() == null) {
-                System.out.println("The way North is blocked.");
+                System.out.println("\033[0;34mThe way North is blocked.\033[0m");
             }
             if (currentRoom.getKnownEast() && currentRoom.getEastRoom() == null) {
-                System.out.println("The way East is blocked.");
+                System.out.println("\033[0;34mThe way East is blocked.\033[0m");
             }
             if (currentRoom.getKnownSouth() && currentRoom.getSouthRoom() == null) {
-                System.out.println("The way South is blocked.");
+                System.out.println("\033[0;34mThe way South is blocked.\033[0m");
             }
             if (currentRoom.getKnownWest() && currentRoom.getWestRoom() == null) {
-                System.out.println("The way West is blocked.");
+                System.out.println("\033[0;34mThe way West is blocked.\033[0m");
             }
             outputDescription();
             return "CONTINUE";
@@ -145,6 +147,7 @@ public class Adventure {
     }
 
     public void outputDescription() {
+        System.out.print("\033[0;34m");
         ArrayList<Item> objects = player.currentRoom.getRoomItems();
         int size = objects.size();
         System.out.print("You can see ");
@@ -158,6 +161,7 @@ public class Adventure {
                 System.out.println(objects.get(i).getItemName());
             }
         }
+        System.out.print("\033[0m");
     }
 
     public void outputBasicDescription() {
