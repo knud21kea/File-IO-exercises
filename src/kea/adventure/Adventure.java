@@ -173,7 +173,7 @@ public class Adventure {
             outputDescription();
             return "CONTINUE";
         } else {
-            System.out.println("\nCongratulations, you have found the sleeping Holge Danske in his Kronborg home.");
+            System.out.println("\nCongratulations, you have found the sleeping Holger Danske in his Kronborg home.");
             return "EXIT";
         }
     }
