@@ -189,7 +189,7 @@ public class Adventure {
         int size = objects.size();
         System.out.print("You are carrying ");
         if (size == 0) {
-            System.out.print("nothing of use.");
+            System.out.println("nothing of use.");
         } else if (size == 1) {
             System.out.print("1 item: " + objects.get(0).getItemName() + ".");
         } else {
@@ -210,7 +210,7 @@ public class Adventure {
         int size = objects.size();
         System.out.print("You can see ");
         if (size == 0) {
-            System.out.print("nothing of interest.");
+            System.out.println("nothing of interest.");
         } else if (size == 1) {
             System.out.print("1 item: " + objects.get(0).getItemName() + ".");
         } else {
@@ -229,7 +229,7 @@ public class Adventure {
     }
 
     public void dropSomething() {
-        System.out.print("Which item do you want to drop? ");
+        System.out.print("Hmmm. Which item do you want to drop? ");
         String itemToDrop = input.nextLine().toUpperCase();
         getMatchingItemNames(itemToDrop);
     }
@@ -254,7 +254,6 @@ public class Adventure {
     public void getMatchingItemNames(String searchFor) {
         ArrayList<Item> givenInventory = player.getPlayerItems();
         ArrayList<String> foundItemNames = new ArrayList<>();
-        System.out.println("Looking for " + searchFor);
         int numberOfNames = givenInventory.size();
         int countItems = 0;
         for (int i = 0; i < numberOfNames; i++) {
@@ -264,28 +263,17 @@ public class Adventure {
             }
         }
         if (countItems == 0) {
-            System.out.println("You do not have " + searchFor + ".");
+            System.out.println("Hmmm. You do not seem to have " + searchFor + ".");
         } else if (countItems == 1) {
             int firstSpace = foundItemNames.get(0).indexOf(" ");
-            System.out.println("Dropping the " + foundItemNames.get(0).substring(firstSpace + 1) + ".");
+            System.out.println("\033[0;34mDropping the " + foundItemNames.get(0).substring(firstSpace + 1) + ".\033[0m");
         } else {
-            System.out.println("I found " + countItems + " items:");
-            for (int i = 0; i < countItems; i++) {
-                System.out.print(foundItemNames.get(i) + " ");
+            System.out.print("I found " + countItems + " items: " + foundItemNames.get(0));
+            for (int i = 1; i < countItems - 1; i++) {
+                System.out.print(", " + makeFirstLetterLowerCase(foundItemNames.get(i)));
             }
+            System.out.println(" and " + makeFirstLetterLowerCase(foundItemNames.get(countItems - 1)) + "?");
+            System.out.println("Could you give me more of a clue?");
         }
-        /*
-        System.out.print("You are carrying ");
-        if (size == 0) {
-            System.out.print("nothing of use.");
-        } else if (size == 1) {
-            System.out.print("1 item: " + objects.get(0).getItemName() + ".");
-        } else {
-            System.out.print(size + " items: " + objects.get(0).getItemName());
-            for (int i = 1; i < size - 1; i++) {
-                System.out.print(", " + makeFirstLetterLowerCase(objects.get(i).getItemName()));
-            }
-            System.out.println(" and " + makeFirstLetterLowerCase(objects.get(size - 1).getItemName()) + ".");
-        }*/
     }
 }
