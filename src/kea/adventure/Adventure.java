@@ -173,14 +173,20 @@ public class Adventure {
     public void outputInventory() {
         System.out.print("\033[0;34m");
         ArrayList<Item> objects = player.getPlayerItems();
+        int size = objects.size();
         System.out.print("You are carrying ");
-        if (objects.size() == 0) {
+        if (size == 0) {
             System.out.print("nothing of use.");
-        } else if (objects.size() == 1) {
+        } else if (size == 1) {
             System.out.print("1 item: " + objects.get(0).getItemName() + ".");
         } else {
-            outputCommon();
+            System.out.print(size + " items: " + objects.get(0).getItemName());
+            for (int i = 1; i < size - 1; i++) {
+                System.out.print(", " + makeFirstLetterLowerCase(objects.get(i).getItemName()));
+            }
+            System.out.println(" and " + makeFirstLetterLowerCase(objects.get(size - 1).getItemName()) + ".");
         }
+        System.out.print("\033[0m");
     }
 
     // Room inventory
@@ -188,31 +194,22 @@ public class Adventure {
     public void outputDescription() {
         System.out.print("\033[0;34m");
         ArrayList<Item> objects = player.currentRoom.getRoomItems();
+        int size = objects.size();
         System.out.print("You can see ");
-        if (objects.size() == 0) {
+        if (size == 0) {
             System.out.print("nothing of interest.");
-        } else if (objects.size() == 1) {
+        } else if (size == 1) {
             System.out.print("1 item: " + objects.get(0).getItemName() + ".");
         } else {
-            outputCommon();
-        }
-    }
-
-    // Code common to inventory methods
-
-    public void outputCommon() {
-        ArrayList<Item> objects = player.currentRoom.getRoomItems();
-        if (objects.size() == 1) {
-            System.out.print("1 item: " + objects.get(0).getItemName() + ".");
-        } else {
-            System.out.print(objects.size() + " items: " + objects.get(0).getItemName());
-            for (int i = 1; i < objects.size() - 1; i++) {
+            System.out.print(size + " items: " + objects.get(0).getItemName());
+            for (int i = 1; i < size - 1; i++) {
                 System.out.print(", " + makeFirstLetterLowerCase(objects.get(i).getItemName()));
             }
-            System.out.println(" and " + makeFirstLetterLowerCase(objects.get(objects.size() - 1).getItemName()) + ".");
+            System.out.println(" and " + makeFirstLetterLowerCase(objects.get(size - 1).getItemName()) + ".");
         }
         System.out.print("\033[0m");
     }
+
 
     public String makeFirstLetterLowerCase(String itemName) {
         return itemName.substring(0, 1).toLowerCase() + itemName.substring(1);
