@@ -19,7 +19,7 @@ public class Item {
     }
 
     public String getItemName() {
-        return itemName;
+        return this.itemName;
     }
 
     public int getItemWeight() {

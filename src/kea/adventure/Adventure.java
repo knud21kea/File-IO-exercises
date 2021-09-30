@@ -125,6 +125,8 @@ public class Adventure {
                 H - Help (this - see what I did there?)
                 L - Look around (room description - always worth a try
                 I - List inventory
+                T - Take item
+                D - Drop item
                 N - Go North
                 E - Go East
                 S - Go South
@@ -193,15 +195,16 @@ public class Adventure {
         if (size == 0) {
             System.out.println("nothing of use.");
         } else if (size == 1) {
-            System.out.println("1 item: " + objects.get(0).getItemName() + ".");
+            System.out.println("1 item of weight " + getTotalWeight() + ": " + objects.get(0).getItemName() + ".");
         } else {
-            System.out.print(size + " items: " + objects.get(0).getItemName());
+            System.out.print(size + " items of weight " + getTotalWeight() + ": " + objects.get(0).getItemName());
             for (int i = 1; i < size - 1; i++) {
                 System.out.print(", " + makeFirstLetterLowerCase(objects.get(i).getItemName()));
             }
             System.out.println(" and " + makeFirstLetterLowerCase(objects.get(size - 1).getItemName()) + ".");
         }
         System.out.print("\033[0m");
+        getTotalWeight();
     }
 
     // Room inventory - with formatted output
@@ -326,5 +329,15 @@ public class Adventure {
             System.out.println("Could you give me more of a clue?");
         }
         return foundItem; // null unless only one match
+    }
+
+    // return total weight of inventory. Not used for anything yet.
+    public int getTotalWeight() {
+        ArrayList<Item> objects = player.getPlayerItems();
+        int weight = 0;
+        for (int i = 0; i < objects.size(); i++) {
+            weight += (objects.get(i).getItemWeight());
+        }
+        return weight;
     }
 }

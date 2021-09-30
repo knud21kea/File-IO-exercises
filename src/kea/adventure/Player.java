@@ -37,11 +37,13 @@ public class Player {
         return this.itemsPlayer;
     }
 
-    //remove an item from inventory
+    // remove an item from inventory
 
     public void dropAnItem(Item itemDropped) {
         this.itemsPlayer.remove(itemDropped);
     }
+
+    // add an item to inventory
 
     public void takeAnItem(Item itemTaken) {
         this.itemsPlayer.add(itemTaken);
