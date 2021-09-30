@@ -55,8 +55,8 @@ public class Adventure {
         */
 
         System.out.println("""
-                \033[0;33m
-                Welcome to this text based Adventure.
+                \033[4;33m
+                Welcome to this text based Adventure.\033[0;33m
                 You can try to move North, East, South or West
                 It is also possible, nae recommended, to explore your current location. You may find blocked directions, or items lying around.
                 Only the weak would think of quitting, but that is always an option.
@@ -77,7 +77,7 @@ public class Adventure {
 
         while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
             outputBasicDescription();
-            boolean canMove = true; //used to only print blocked if user tries a blocked route
+            boolean canMove = false; //used to only print blocked if user tries a blocked route
             System.out.print("What do you want to do? ");
             menuOption = input.nextLine().toUpperCase();
 
@@ -99,6 +99,8 @@ public class Adventure {
                 takeSomething();
             } else if (menuOption.startsWith("TAKE ") || menuOption.startsWith("T ")) {
                 takeItem(menuOption);
+            } else if (menuOption.equals("GO") || menuOption.equals("G")) {
+                canMove = goSomewhere();
             } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N")) {
                 canMove = player.changeRoom("N");
             } else if (menuOption.equals("GO EAST") || menuOption.equals("EAST") || menuOption.equals("E")) {
@@ -114,6 +116,24 @@ public class Adventure {
                 System.out.println("\033[0;31mThat way is blocked.\033[0m");
             }
         }
+    }
+
+    // Overload if user only types "go" or "g"
+
+    public boolean goSomewhere() {
+        boolean canMove = false;
+        System.out.print("Hmmm. Which direction do you want to go? ");
+        String direction = input.nextLine().toUpperCase();
+        if (direction.startsWith("N")) {
+            canMove = player.changeRoom("N");
+        } else if (direction.startsWith("E")) {
+            canMove = player.changeRoom("E");
+        } else if(direction.startsWith("S")) {
+            canMove = player.changeRoom("S");
+        } else if(direction.startsWith("W")) {
+            canMove = player.changeRoom("W");
+        }
+        return canMove;
     }
 
     // Help info - only with the short commands
