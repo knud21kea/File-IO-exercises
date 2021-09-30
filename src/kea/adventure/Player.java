@@ -1,4 +1,4 @@
-// Only the player object knows which room he is in
+// Only the player object knows which room he is in and which items he has
 
 package kea.adventure;
 
@@ -31,8 +31,16 @@ public class Player {
         return false;
     }
 
+    // Player inventory list
+
     public ArrayList getPlayerItems() {
         return this.itemsPlayer;
+    }
+
+    //remove an item from inventory
+
+    public void dropAnItem(Item itemDropped) {
+        itemsPlayer.remove(itemDropped);
     }
 }
 

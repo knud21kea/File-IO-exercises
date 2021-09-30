@@ -231,7 +231,7 @@ public class Adventure {
     public void dropSomething() {
         System.out.print("Hmmm. Which item do you want to drop? ");
         String itemToDrop = input.nextLine().toUpperCase();
-        getMatchingItemNames(itemToDrop);
+        getMatchingPlayerItemNames(itemToDrop);
     }
 
     // Currently, only counts occurrences of the input string in the inventory item names
@@ -242,7 +242,7 @@ public class Adventure {
         } else {
             menuItem = menuItem.substring(2); // command was "d string"
         }
-        getMatchingItemNames(menuItem);
+        getMatchingPlayerItemNames(menuItem);
     }
 
     // maybe common code for both player inventory and room inventory?
@@ -251,15 +251,19 @@ public class Adventure {
     // start by trying to count matching names and printing them out here
     // this code only for player inventory
 
-    public void getMatchingItemNames(String searchFor) {
+    public void getMatchingPlayerItemNames(String searchFor) {
         ArrayList<Item> givenInventory = player.getPlayerItems();
         ArrayList<String> foundItemNames = new ArrayList<>();
+        Item foundItem = null;
         int numberOfNames = givenInventory.size();
         int countItems = 0;
         for (int i = 0; i < numberOfNames; i++) {
             if (givenInventory.get(i).getItemName().toUpperCase().contains(searchFor)) {
                 countItems++;
                 foundItemNames.add(givenInventory.get(i).getItemName());
+                if (countItems == 1) {
+                    foundItem = givenInventory.get(i); // first matching item
+                }
             }
         }
         if (countItems == 0) {
@@ -267,6 +271,8 @@ public class Adventure {
         } else if (countItems == 1) {
             int firstSpace = foundItemNames.get(0).indexOf(" ");
             System.out.println("\033[0;34mDropping the " + foundItemNames.get(0).substring(firstSpace + 1) + ".\033[0m");
+            player.dropAnItem(foundItem); // first and only match removed from player
+            player.currentRoom.addItemToRoom(foundItem); // and added to current room
         } else {
             System.out.print("I found " + countItems + " items: " + foundItemNames.get(0));
             for (int i = 1; i < countItems - 1; i++) {
