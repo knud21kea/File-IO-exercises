@@ -25,7 +25,6 @@ public class Adventure {
     private final Scanner input = new Scanner(System.in);
     private final Map map;
     private final Player player;
-    //private ArrayList<Item> givenInventory;
 
     public static void main(String[] args) {
 
@@ -39,14 +38,13 @@ public class Adventure {
          Initialise rooms and make connections (auto 2-way joins so no 1-way passages)
          There could be a choice of maps - we have default
          Initialise player object - there could be a user input for player name
+         Added starting objects in rooms and players inventory for test
          */
 
         map = new Map();
         map.buildMap();
         map.addStarterItems();
         player = new Player(map);
-
-
     }
 
     public void playGame() {
@@ -83,7 +81,7 @@ public class Adventure {
             System.out.print("What do you want to do? ");
             menuOption = input.nextLine().toUpperCase();
 
-            // Player choice with multiple command forms
+            // Player choice with multiple command forms - had to drop the case switch
 
             if (menuOption.equals("EXIT") || menuOption.equals("X") || menuOption.equals("QUIT") || menuOption.equals("Q")) {
                 menuOption = endMessage();
@@ -97,6 +95,10 @@ public class Adventure {
                 dropSomething();
             } else if (menuOption.startsWith("DROP ") || menuOption.startsWith("D ")) {
                 dropItem(menuOption);
+            } else if (menuOption.equals("TAKE") || menuOption.equals("T")) {
+                takeSomething();
+            } else if (menuOption.startsWith("TAKE ") || menuOption.startsWith("T ")) {
+                takeItem(menuOption);
             } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N")) {
                 canMove = player.changeRoom("N");
             } else if (menuOption.equals("GO EAST") || menuOption.equals("EAST") || menuOption.equals("E")) {
@@ -130,7 +132,7 @@ public class Adventure {
                 X - Exit\033[0m""");
     }
 
-    // Give up
+    // Give up - option to back out of quitting
 
     public String endMessage() {
         System.out.print("\033[0;33m\nAre you sure you want to quit? (y/n)\033[0m ");
@@ -191,7 +193,7 @@ public class Adventure {
         if (size == 0) {
             System.out.println("nothing of use.");
         } else if (size == 1) {
-            System.out.print("1 item: " + objects.get(0).getItemName() + ".");
+            System.out.println("1 item: " + objects.get(0).getItemName() + ".");
         } else {
             System.out.print(size + " items: " + objects.get(0).getItemName());
             for (int i = 1; i < size - 1; i++) {
@@ -212,7 +214,7 @@ public class Adventure {
         if (size == 0) {
             System.out.println("nothing of interest.");
         } else if (size == 1) {
-            System.out.print("1 item: " + objects.get(0).getItemName() + ".");
+            System.out.println("1 item: " + objects.get(0).getItemName() + ".");
         } else {
             System.out.print(size + " items: " + objects.get(0).getItemName());
             for (int i = 1; i < size - 1; i++) {
@@ -228,33 +230,78 @@ public class Adventure {
         return itemName.substring(0, 1).toLowerCase() + itemName.substring(1);
     }
 
+    // Overload dropItem when user types only "drop"
+
     public void dropSomething() {
         System.out.print("Hmmm. Which item do you want to drop? ");
         String itemToDrop = input.nextLine().toUpperCase();
-        getMatchingPlayerItemNames(itemToDrop);
+        Item foundItem = getMatchingItemNames(itemToDrop, true);
+        if (foundItem != null) {
+            player.dropAnItem(foundItem); // first and only match removed from player
+            player.currentRoom.addItemToRoom(foundItem); // and added to current room
+        }
     }
 
-    // Currently, only counts occurrences of the input string in the inventory item names
-    public void dropItem(String menuItem) {
+    // Takes item from room and adds to player if input string is matched to exactly 1 item
 
+    public void dropItem(String menuItem) {
         if (menuItem.startsWith("DROP ")) {
             menuItem = menuItem.substring(5); // command was "drop string"
         } else {
             menuItem = menuItem.substring(2); // command was "d string"
         }
-        getMatchingPlayerItemNames(menuItem);
+        Item foundItem = getMatchingItemNames(menuItem, true);
+        if (foundItem != null) {
+            player.dropAnItem(foundItem); // first and only match removed from player
+            player.currentRoom.addItemToRoom(foundItem); // and added to current room
+        }
     }
 
-    // maybe common code for both player inventory and room inventory?
-    // need to loop through the objects in the given list and check if search is found in an item name
-    // there may be found no, one or multiple items
-    // start by trying to count matching names and printing them out here
-    // this code only for player inventory
+    // Overload take item when user types only "take"
 
-    public void getMatchingPlayerItemNames(String searchFor) {
-        ArrayList<Item> givenInventory = player.getPlayerItems();
+    public void takeSomething() {
+        System.out.print("Hmmm. Which item do you want to pick up? ");
+        String itemToDrop = input.nextLine().toUpperCase();
+        Item foundItem = getMatchingItemNames(itemToDrop, false);
+        if (foundItem != null) {
+            player.takeAnItem(foundItem); // first and only match removed from player
+            player.currentRoom.takeItemFromRoom(foundItem); // and added to current room
+        }
+    }
+
+    // Takes item from room and adds to player if input string is matched to exactly 1 item
+
+    public void takeItem(String menuItem) {
+        if (menuItem.startsWith("TAKE ")) {
+            menuItem = menuItem.substring(5); // command was "take string"
+        } else {
+            menuItem = menuItem.substring(2); // command was "t string"
+        }
+        Item foundItem = getMatchingItemNames(menuItem, false);
+        if (foundItem != null) {
+            player.takeAnItem(foundItem); // first and only match removed from player
+            player.currentRoom.takeItemFromRoom(foundItem); // and added to current room
+        }
+    }
+
+    // common code for both player inventory and room inventory with boolean control
+    // loops through the objects in the given list and check if search is found in an item name
+    // there may be found no, one or multiple items
+
+    public Item getMatchingItemNames(String searchFor, boolean drop) {
+        String textDrop, textTake; // only minor difference between drop and take
+        ArrayList<Item> givenInventory;
+        if (drop) {
+            givenInventory = player.getPlayerItems();
+            textDrop = "Hmmm. You do not seem to have ";
+            textTake = "\033[0;34mDropping the ";
+        } else {
+            givenInventory = player.currentRoom.getRoomItems();
+            textDrop = "Hmmm. I cannot seem to see ";
+            textTake = "\033[0;34mTaking the ";
+        }
         ArrayList<String> foundItemNames = new ArrayList<>();
-        Item foundItem = null;
+        Item foundItem = null; // default no item match
         int numberOfNames = givenInventory.size();
         int countItems = 0;
         for (int i = 0; i < numberOfNames; i++) {
@@ -267,13 +314,12 @@ public class Adventure {
             }
         }
         if (countItems == 0) {
-            System.out.println("Hmmm. You do not seem to have " + searchFor + ".");
+            System.out.println(textDrop + searchFor + ".");
         } else if (countItems == 1) {
             int firstSpace = foundItemNames.get(0).indexOf(" ");
-            System.out.println("\033[0;34mDropping the " + foundItemNames.get(0).substring(firstSpace + 1) + ".\033[0m");
-            player.dropAnItem(foundItem); // first and only match removed from player
-            player.currentRoom.addItemToRoom(foundItem); // and added to current room
+            System.out.println(textTake + foundItemNames.get(0).substring(firstSpace + 1) + ".\033[0m");
         } else {
+            foundItem = null; // need to reset when more than 1 match
             System.out.print("I found " + countItems + " items: " + foundItemNames.get(0));
             for (int i = 1; i < countItems - 1; i++) {
                 System.out.print(", " + makeFirstLetterLowerCase(foundItemNames.get(i)));
@@ -281,5 +327,6 @@ public class Adventure {
             System.out.println(" and " + makeFirstLetterLowerCase(foundItemNames.get(countItems - 1)) + "?");
             System.out.println("Could you give me more of a clue?");
         }
+        return foundItem; // null unless only one match
     }
 }

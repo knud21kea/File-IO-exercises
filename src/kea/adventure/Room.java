@@ -34,6 +34,11 @@ public class Room {
         this.items.add(item);
     }
 
+    // Take item from room
+    public void takeItemFromRoom(Item item) {
+        this.items.remove(item);
+    }
+
     // connect two rooms South to North
 
     public void connectSouthNorth(Room south) {

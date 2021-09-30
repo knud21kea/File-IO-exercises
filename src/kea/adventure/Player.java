@@ -40,7 +40,11 @@ public class Player {
     //remove an item from inventory
 
     public void dropAnItem(Item itemDropped) {
-        itemsPlayer.remove(itemDropped);
+        this.itemsPlayer.remove(itemDropped);
+    }
+
+    public void takeAnItem(Item itemTaken) {
+        this.itemsPlayer.add(itemTaken);
     }
 }
 
