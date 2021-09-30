@@ -24,8 +24,6 @@ public class Map {
     //public Player player;
     public ArrayList<Item> startInventory = new ArrayList<>();
 
-
-
     public Map() {
     }
 
@@ -64,6 +62,7 @@ public class Map {
         Item smallKnife = new Item("A small knife", 5);
         Item emptyBottle = new Item("An empty bottle", 5);
         Item silverKey = new Item("A silver key", 1);
+        Item silverCoin = new Item("A silver coin", 1);
         Item goldKey = new Item("A gold key", 1);
         Item goldBar = new Item("A gold bar", 20);
         Item anApple = new Item("An apple", 5);
@@ -79,7 +78,7 @@ public class Map {
         ballroom.addItemToRoom(smallKnife);
         ballroom.addItemToRoom(emptyBottle);
         banquet.addItemToRoom(anApple);
-        banquet.addItemToRoom(silverKey);
+        banquet.addItemToRoom(silverCoin);
         banquet.addItemToRoom(goldBar);
         apartment.addItemToRoom(goldKey);
         hall.addItemToRoom(oldParchment);

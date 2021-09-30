@@ -289,16 +289,16 @@ public class Adventure {
     // there may be found no, one or multiple items
 
     public Item getMatchingItemNames(String searchFor, boolean drop) {
-        String textDrop, textTake; // only minor difference between drop and take
+        String text1, text2; // only minor difference between drop and take
         ArrayList<Item> givenInventory;
         if (drop) {
             givenInventory = player.getPlayerItems();
-            textDrop = "Hmmm. You do not seem to have ";
-            textTake = "\033[0;34mDropping the ";
+            text1 = "Hmmm. You do not seem to have ";
+            text2 = "\033[0;34mDropping the ";
         } else {
             givenInventory = player.currentRoom.getRoomItems();
-            textDrop = "Hmmm. I cannot seem to see ";
-            textTake = "\033[0;34mTaking the ";
+            text1 = "Hmmm. I cannot seem to see ";
+            text2 = "\033[0;34mTaking the ";
         }
         ArrayList<String> foundItemNames = new ArrayList<>();
         Item foundItem = null; // default no item match
@@ -307,17 +307,15 @@ public class Adventure {
         for (int i = 0; i < numberOfNames; i++) {
             if (givenInventory.get(i).getItemName().toUpperCase().contains(searchFor)) {
                 countItems++;
-                foundItemNames.add(givenInventory.get(i).getItemName());
-                if (countItems == 1) {
-                    foundItem = givenInventory.get(i); // first matching item
-                }
+                foundItem = givenInventory.get(i); // any matching item
+                foundItemNames.add(foundItem.getItemName());
             }
         }
         if (countItems == 0) {
-            System.out.println(textDrop + searchFor + ".");
+            System.out.println(text1 + searchFor + ".");
         } else if (countItems == 1) {
             int firstSpace = foundItemNames.get(0).indexOf(" ");
-            System.out.println(textTake + foundItemNames.get(0).substring(firstSpace + 1) + ".\033[0m");
+            System.out.println(text2 + foundItemNames.get(0).substring(firstSpace + 1) + ".\033[0m");
         } else {
             foundItem = null; // need to reset when more than 1 match
             System.out.print("I found " + countItems + " items: " + foundItemNames.get(0));
