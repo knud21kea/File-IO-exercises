@@ -88,6 +88,9 @@ public class Map {
         startInventory.add(magneticCompass);
         startInventory.add(boxOfMatches);
         startInventory.add(paperClip);
+        startInventory.add(silverKey);
+        startInventory.add(goldKey);
+        startInventory.add(goldBar);
     }
 
     // Default start is in room 1

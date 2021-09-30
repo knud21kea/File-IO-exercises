@@ -18,6 +18,7 @@ There is an achievable goal using the available commands.
 package kea.adventure;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Adventure {
@@ -25,6 +26,7 @@ public class Adventure {
     private final Scanner input = new Scanner(System.in);
     private final Map map;
     private final Player player;
+    //private ArrayList<Item> givenInventory;
 
     public static void main(String[] args) {
 
@@ -89,6 +91,7 @@ public class Adventure {
                 case "HELP", "H", "INFO" -> getHelp();
                 case "INVENTORY", "INV", "I" -> outputInventory();
                 case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(player.currentRoom, map.getSpecialRoom());
+                case "DROP", "D" -> dropItem();
                 case "GO NORTH", "NORTH", "N" -> canMove = player.changeRoom("N");
                 case "GO EAST", "EAST", "E" -> canMove = player.changeRoom("E");
                 case "GO SOUTH", "SOUTH", "S" -> canMove = player.changeRoom("S");
@@ -168,7 +171,7 @@ public class Adventure {
         System.out.println(player.currentRoom.getRoomDescription());
     }
 
-    // Player inventory
+    // Player inventory - with formatted output
 
     public void outputInventory() {
         System.out.print("\033[0;34m");
@@ -189,7 +192,7 @@ public class Adventure {
         System.out.print("\033[0m");
     }
 
-    // Room inventory
+    // Room inventory - with formatted output
 
     public void outputDescription() {
         System.out.print("\033[0;34m");
@@ -213,5 +216,31 @@ public class Adventure {
 
     public String makeFirstLetterLowerCase(String itemName) {
         return itemName.substring(0, 1).toLowerCase() + itemName.substring(1);
+    }
+
+    // Currently, only counts occurrences of the input string in the inventory item names
+    public void dropItem() {
+        System.out.print("Which item do you want to drop? ");
+        String itemToDrop = input.nextLine();
+        getItemCount(itemToDrop);
+    }
+
+    // maybe common code for both player inventory and room inventory?
+    // need to loop through the objects in the given list and check if search is found in an item name
+    // there may be found no, one or multiple items
+    // start by trying to count matching names and printing them out here
+
+    public void getItemCount(String searchFor) {
+        ArrayList<Item> givenInventory = player.getPlayerItems();
+        System.out.println("Looking for " + searchFor);
+        int numberOfNames = givenInventory.size();
+        int countItems = 0;
+        for (int i = 0; i < numberOfNames; i++) {
+            if (givenInventory.get(i).getItemName().contains(searchFor)) {
+                countItems++;
+                System.out.println(givenInventory.get(i).getItemName());
+            }
+        }
+        System.out.println(countItems + " found");
     }
 }
