@@ -86,17 +86,28 @@ public class Adventure {
 
             // Player choice with multiple command forms
 
-            switch (menuOption) {
-                case "EXIT", "X", "QUIT", "Q" -> menuOption = endMessage();
-                case "HELP", "H", "INFO" -> getHelp();
-                case "INVENTORY", "INV", "I" -> outputInventory();
-                case "EXPLORE", "LOOK", "L" -> menuOption = lookAround(player.currentRoom, map.getSpecialRoom());
-                case "DROP", "D" -> dropItem();
-                case "GO NORTH", "NORTH", "N" -> canMove = player.changeRoom("N");
-                case "GO EAST", "EAST", "E" -> canMove = player.changeRoom("E");
-                case "GO SOUTH", "SOUTH", "S" -> canMove = player.changeRoom("S");
-                case "GO WEST", "WEST", "W" -> canMove = player.changeRoom("W");
-                default -> unknownCommand(menuOption);
+            if (menuOption.equals("EXIT") || menuOption.equals("X") || menuOption.equals("QUIT") || menuOption.equals("Q")) {
+                menuOption = endMessage();
+            } else if (menuOption.equals("HELP") || menuOption.equals("H") || menuOption.equals("INFO")) {
+                getHelp();
+            } else if (menuOption.equals("INVENTORY") || menuOption.equals("INV") || menuOption.equals("I")) {
+                outputInventory();
+            } else if (menuOption.equals("EXPLORE") || menuOption.equals("LOOK") || menuOption.equals("L")) {
+                menuOption = lookAround(player.currentRoom, map.getSpecialRoom());
+            } else if (menuOption.equals("DROP") || menuOption.equals("D")) {
+                dropSomething();
+            } else if (menuOption.startsWith("DROP ") || menuOption.startsWith("D ")) {
+                dropItem(menuOption);
+            } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N")) {
+                canMove = player.changeRoom("N");
+            } else if (menuOption.equals("GO EAST") || menuOption.equals("EAST") || menuOption.equals("E")) {
+                canMove = player.changeRoom("E");
+            } else if (menuOption.equals("GO SOUTH") || menuOption.equals("SOUTH") || menuOption.equals("S")) {
+                canMove = player.changeRoom("S");
+            } else if (menuOption.equals("GO WEST") || menuOption.equals("WEST") || menuOption.equals("W")) {
+                canMove = player.changeRoom("W");
+            } else {
+                unknownCommand(menuOption);
             }
             if (!canMove) {
                 System.out.println("\033[0;31mThat way is blocked.\033[0m");
@@ -218,11 +229,21 @@ public class Adventure {
         return itemName.substring(0, 1).toLowerCase() + itemName.substring(1);
     }
 
+        public void dropSomething() {
+            System.out.print("Which item do you want to drop? ");
+            String itemToDrop = input.nextLine().toUpperCase();
+            getItemCount(itemToDrop);
+        }
+
     // Currently, only counts occurrences of the input string in the inventory item names
-    public void dropItem() {
-        System.out.print("Which item do you want to drop? ");
-        String itemToDrop = input.nextLine();
-        getItemCount(itemToDrop);
+    public void dropItem(String menuItem) {
+
+        if (menuItem.startsWith("DROP ")) {
+            menuItem = menuItem.substring(5);
+        } else {
+            menuItem = menuItem.substring(2);
+        }
+        getItemCount(menuItem);
     }
 
     // maybe common code for both player inventory and room inventory?
@@ -236,7 +257,7 @@ public class Adventure {
         int numberOfNames = givenInventory.size();
         int countItems = 0;
         for (int i = 0; i < numberOfNames; i++) {
-            if (givenInventory.get(i).getItemName().contains(searchFor)) {
+            if (givenInventory.get(i).getItemName().toUpperCase().contains(searchFor)) {
                 countItems++;
                 System.out.println(givenInventory.get(i).getItemName());
             }
