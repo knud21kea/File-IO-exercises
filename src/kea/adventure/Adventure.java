@@ -45,7 +45,7 @@ public class Adventure {
         map = new Map();
         map.buildMap();
         map.addStarterItems();
-        player = new Player(map, map.chapel);
+        player = new Player(map, map.courtyard);
         holger = new Player(map, map.catacombs);
     }
 
@@ -91,6 +91,8 @@ public class Adventure {
                 menuOption = endMessage();
             } else if (menuOption.equals("HELP") || menuOption.equals("H") || menuOption.equals("INFO")) {
                 getHelp();
+            } else if (menuOption.equals("CHEAT") || menuOption.equals("C") || menuOption.equals("SPOILER")) {
+                showSpoiler();
             } else if (menuOption.equals("INVENTORY") || menuOption.equals("INV") || menuOption.equals("I")) {
                 outputInventory();
             } else if (menuOption.equals("EXPLORE") || menuOption.equals("LOOK") || menuOption.equals("L")) {
@@ -144,8 +146,8 @@ public class Adventure {
 
     public void getHelp() {
         System.out.println("""
-                \033[0;33m
-                You can use these commands, with some variations:
+                \033[4;33m
+                You can use these commands, with some variations:\033[0;33m
                 H - Help (this - see what I did there?)
                 L - Look around (room description - always worth a try)
                 I - List inventory
@@ -157,6 +159,31 @@ public class Adventure {
                 W - Go West
                 X - Exit
                 C - Cheat (how to win)\033[0m""");
+    }
+
+    public void showSpoiler() {
+        System.out.println("""
+                \033[4;33m
+                ******************** Spoiler Alert ********************\033[0;33m
+                The catacomb is a special room.
+                If you try to look around there without completing the task, you will lose.
+                The task is just to find and move a gold bar and some holy water to the room.
+                To win you must first drop these items and then look around.\033[0m                                
+                     ___________________     __________________     __________________
+                     |                  |    |                 |    |                 |
+                     |    Courtyard     | == |   Chancellery   | == |    Ballroom     |
+                     |__________________|    |_________________|    |_________________|
+                              ||                                            ||
+                     ___________________     __________________     __________________
+                     |                  |    |                 |    |                 |
+                     |   Banquet room   |    |    Catacomb     |    | Royal apartment |
+                     |__________________|    |_________________|    |_________________|
+                              ||                     ||                     ||
+                     ___________________     __________________     __________________
+                     |                  |    |                 |    |                 |
+                     |    Little hall   | == |    Casements    | == |     Chapel      |
+                     |__________________|    |_________________|    |_________________|
+                """);
     }
 
     // Give up - option to back out of quitting
