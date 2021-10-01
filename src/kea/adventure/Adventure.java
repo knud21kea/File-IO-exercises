@@ -24,7 +24,8 @@ public class Adventure {
 
     private final Scanner input = new Scanner(System.in);
     private final Map map;
-    private final Player player;
+    private final Player player, holger;
+    private boolean canMove;
 
     public static void main(String[] args) {
 
@@ -44,7 +45,8 @@ public class Adventure {
         map = new Map();
         map.buildMap();
         map.addStarterItems();
-        player = new Player(map);
+        player = new Player(map, map.chapel);
+        holger = new Player(map, map.catacombs);
     }
 
     public void playGame() {
@@ -60,9 +62,8 @@ public class Adventure {
                 You can try to move North, East, South or West
                 It is also possible, nae recommended, to explore your current location. You may find blocked directions, or items lying around.
                 Only the weak would think of quitting, but that is always an option.
-                To see a list of available commands type help.
-                        
-                Find the long lost hero or fail trying. How will it end...?\033[0m""");
+                                        
+                Find the long lost hero or fail trying. How will it end...?\n\033[0m""");
 
         // Start game or exit
 
@@ -73,11 +74,14 @@ public class Adventure {
         } else {
             menuOption = "START";
         }
+        System.out.println("To see a list of available commands type help. Maybe try that now.");
+
         // Get inputs until user types exit/x or quit/q or game is won
 
         while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
+
             outputBasicDescription();
-            boolean canMove = false; //used to only print blocked if user tries a blocked route
+            canMove = true; //used to only print blocked if user tries a blocked route
             System.out.print("What do you want to do? ");
             menuOption = input.nextLine().toUpperCase();
 
@@ -101,13 +105,13 @@ public class Adventure {
                 takeItem(menuOption);
             } else if (menuOption.equals("GO") || menuOption.equals("G")) {
                 canMove = goSomewhere();
-            } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N")) {
+            } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N") || menuOption.equals("GO N")) {
                 canMove = player.changeRoom("N");
-            } else if (menuOption.equals("GO EAST") || menuOption.equals("EAST") || menuOption.equals("E")) {
+            } else if (menuOption.equals("GO EAST") || menuOption.equals("EAST") || menuOption.equals("E") || menuOption.equals("GO E")) {
                 canMove = player.changeRoom("E");
-            } else if (menuOption.equals("GO SOUTH") || menuOption.equals("SOUTH") || menuOption.equals("S")) {
+            } else if (menuOption.equals("GO SOUTH") || menuOption.equals("SOUTH") || menuOption.equals("S") || menuOption.equals("GO S")) {
                 canMove = player.changeRoom("S");
-            } else if (menuOption.equals("GO WEST") || menuOption.equals("WEST") || menuOption.equals("W")) {
+            } else if (menuOption.equals("GO WEST") || menuOption.equals("WEST") || menuOption.equals("W") || menuOption.equals("GO W")) {
                 canMove = player.changeRoom("W");
             } else {
                 unknownCommand(menuOption);
@@ -143,7 +147,7 @@ public class Adventure {
                 \033[0;33m
                 You can use these commands, with some variations:
                 H - Help (this - see what I did there?)
-                L - Look around (room description - always worth a try
+                L - Look around (room description - always worth a try)
                 I - List inventory
                 T - Take item
                 D - Drop item
@@ -151,7 +155,8 @@ public class Adventure {
                 E - Go East
                 S - Go South
                 W - Go West
-                X - Exit\033[0m""");
+                X - Exit
+                C - Cheat (how to win)\033[0m""");
     }
 
     // Give up - option to back out of quitting
@@ -193,7 +198,11 @@ public class Adventure {
             outputDescription();
             return "CONTINUE";
         } else {
-            System.out.println("\nCongratulations, you have found the sleeping Holger Danske in his Kronborg home.");
+            if (!checkForHolyWater() || !checkForGoldBar()) {
+                System.out.println("\n\033[0;31mYou woke Holger Danske without fullfilling his needs . He is not happy.\033[0m");
+            } else {
+                System.out.println("\n\033[0;33mYou woke Holger Danske and honoured his needs . Congratulations.\033[0m");
+            }
             return "EXIT";
         }
     }
@@ -360,4 +369,13 @@ public class Adventure {
         }
         return weight;
     }
+    public boolean checkForHolyWater() {
+        ArrayList<Item> objects = map.catacombs.getRoomItems();
+        return (objects.contains(map.holyWater));
+    }
+    public boolean checkForGoldBar() {
+        ArrayList<Item> objects = map.catacombs.getRoomItems();
+        return (objects.contains(map.goldBar));
+    }
+
 }

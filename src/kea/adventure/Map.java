@@ -21,8 +21,24 @@ import java.util.ArrayList;
 public class Map {
 
     public Room courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel;
-    //public Player player;
     public ArrayList<Item> startInventory = new ArrayList<>();
+
+    // Create all instances of Item class
+    // Some names have duplicates to test the parser - key, gold, silver etc.
+
+    Item brassLamp = new Item("A brass lamp", 15);
+    Item smallKnife = new Item("A small knife", 5);
+    Item emptyBottle = new Item("An empty bottle", 5);
+    Item silverKey = new Item("A silver key", 1);
+    Item silverCoin = new Item("A silver coin", 1);
+    Item goldKey = new Item("A gold key", 1);
+    Item goldBar = new Item("A gold bar", 20);
+    Item anApple = new Item("An apple", 5);
+    Item holyWater = new Item("Some holy water", 10);
+    Item oldParchment = new Item("An old parchment", 2);
+    Item magneticCompass = new Item("A magnetic compass", 5);
+    Item boxOfMatches = new Item("A box of matches", 5);
+    Item paperClip = new Item("A paper clip", 0);
 
     public Map() {
     }
@@ -56,22 +72,6 @@ public class Map {
 
     public void addStarterItems() {
 
-        // Create all instances of Item class
-
-        Item brassLamp = new Item("A brass lamp", 15);
-        Item smallKnife = new Item("A small knife", 5);
-        Item emptyBottle = new Item("An empty bottle", 5);
-        Item silverKey = new Item("A silver key", 1);
-        Item silverCoin = new Item("A silver coin", 1);
-        Item goldKey = new Item("A gold key", 1);
-        Item goldBar = new Item("A gold bar", 20);
-        Item anApple = new Item("An apple", 5);
-        Item holyWater = new Item("Some holy water", 10);
-        Item oldParchment = new Item("An old parchment", 2);
-        Item magneticCompass = new Item("A magnetic compass", 5);
-        Item boxOfMatches = new Item("A box of matches", 5);
-        Item paperClip = new Item("A paper clip", 0);
-
         // Place items in rooms
 
         chancellery.addItemToRoom(brassLamp);
@@ -84,15 +84,16 @@ public class Map {
         hall.addItemToRoom(oldParchment);
         chapel.addItemToRoom(holyWater);
 
+        // Items the player has to start with
+
         startInventory.add(magneticCompass);
         startInventory.add(boxOfMatches);
         startInventory.add(paperClip);
         startInventory.add(silverKey);
         startInventory.add(goldKey);
-        startInventory.add(goldBar);
     }
 
-    // Default start is in room 1
+    // Default start is in room 1 (now an argument in Player class)
 
     public Room getStarterRoom() {
         return courtyard;

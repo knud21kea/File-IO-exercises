@@ -10,8 +10,8 @@ public class Player {
     private Room requestedRoom;
     private ArrayList itemsPlayer; // Player inventory
 
-    public Player(Map map) {
-        this.currentRoom = map.getStarterRoom();
+    public Player(Map map, Room start) {
+        this.currentRoom = start; //map.getStarterRoom();
         this.itemsPlayer = map.getInitialInventory();
     }
 
