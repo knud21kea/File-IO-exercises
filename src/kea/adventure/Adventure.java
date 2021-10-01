@@ -9,9 +9,21 @@ DAT21 Java project (compulsory group exercise).
 A simple text-based adventure game inspired by "Colossal Cave Adventure",
  by William Crowther and Don Woods, from 1976-1977.
 
+Version 1:
+
 A single player navigates through a small maze of rooms using a simple text parser interface.
 In each room it is possible to get limited information about the room, and move to connected rooms.
+
 There is an achievable goal using the available commands.
+
+Change log for version 2:
+
+Added items that can be carried from room to room, dropped or taken.
+Added Strength points that are lost by doing actions and gained by resting.
+Added weights to items.
+Added max carrying weight for player, meaning sometimes something must be dropped to take something else.
+Added more commands: Inventory player, Inventory room, Take item, Drop item, Show cheat sheet.
+Added mission that requires successful combination of available commands. Player can also die.
 
 ************************************************************************************************** */
 
@@ -259,7 +271,8 @@ public class Adventure {
     // Brief info without looking around
 
     public void outputBasicDescription() {
-        System.out.print("\nYou are in " + player.currentRoom.getRoomName() + ": ");
+        System.out.print("\nStrength " + player.getStrengthPoints() + "% ");
+        System.out.print(":You are in " + player.currentRoom.getRoomName() + ": ");
         System.out.println(player.currentRoom.getRoomDescription());
     }
 
