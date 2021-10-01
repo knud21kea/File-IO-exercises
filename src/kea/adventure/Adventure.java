@@ -62,6 +62,7 @@ public class Adventure {
                 You can try to move North, East, South or West
                 It is also possible, nae recommended, to explore your current location. You may find blocked directions, or items lying around.
                 Only the weak would think of quitting, but that is always an option.
+                Most actions cost strength points, but resting gets them back
                                         
                 Find the long lost hero or fail trying. How will it end...?\n\033[0m""");
 
@@ -80,6 +81,15 @@ public class Adventure {
 
         while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
 
+            int currentStrength = player.getStrengthPoints();
+            if (currentStrength < 1) {
+                System.out.println("\033[0;31mYou are dead. You should have rested a while!!\033[0m");
+                menuOption = "X";
+            } else if (currentStrength < 20) {
+                System.out.println("\033[0;33mYou are exhausted, you really should rest a while!\033[0m");
+            } else if (currentStrength < 50) {
+                System.out.println("\033[0;32mYou are getting tired, maybe you should rest a while.\033[0m");
+            }
             outputBasicDescription();
             canMove = true; //used to only print blocked if user tries a blocked route
             System.out.print("What do you want to do? ");
@@ -93,6 +103,8 @@ public class Adventure {
                 getHelp();
             } else if (menuOption.equals("CHEAT") || menuOption.equals("C") || menuOption.equals("SPOILER")) {
                 showSpoiler();
+            } else if (menuOption.equals("REST") || menuOption.equals("R") || menuOption.equals("SLEEP")) {
+                getSomeRest();
             } else if (menuOption.equals("INVENTORY") || menuOption.equals("INV") || menuOption.equals("I")) {
                 outputInventory();
             } else if (menuOption.equals("EXPLORE") || menuOption.equals("LOOK") || menuOption.equals("L")) {
@@ -109,15 +121,20 @@ public class Adventure {
                 canMove = goSomewhere();
             } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N") || menuOption.equals("GO N")) {
                 canMove = player.changeRoom("N");
+                updateStrengthPoints(-5);
             } else if (menuOption.equals("GO EAST") || menuOption.equals("EAST") || menuOption.equals("E") || menuOption.equals("GO E")) {
                 canMove = player.changeRoom("E");
+                updateStrengthPoints(-5);
             } else if (menuOption.equals("GO SOUTH") || menuOption.equals("SOUTH") || menuOption.equals("S") || menuOption.equals("GO S")) {
                 canMove = player.changeRoom("S");
+                updateStrengthPoints(-5);
             } else if (menuOption.equals("GO WEST") || menuOption.equals("WEST") || menuOption.equals("W") || menuOption.equals("GO W")) {
                 canMove = player.changeRoom("W");
+                updateStrengthPoints(-5);
             } else {
                 unknownCommand(menuOption);
             }
+
             if (!canMove) {
                 System.out.println("\033[0;31mThat way is blocked.\033[0m");
             }
@@ -139,6 +156,7 @@ public class Adventure {
         } else if(direction.startsWith("W")) {
             canMove = player.changeRoom("W");
         }
+        updateStrengthPoints(-5);
         return canMove;
     }
 
@@ -159,6 +177,7 @@ public class Adventure {
                 W - Go West
                 X - Exit
                 C - Cheat (how to win)\033[0m""");
+        updateStrengthPoints(-1);
     }
 
     public void showSpoiler() {
@@ -184,6 +203,7 @@ public class Adventure {
                      |    Little hall   | == |    Casements    | == |     Chapel      |
                      |__________________|    |_________________|    |_________________|
                 """);
+        updateStrengthPoints(-10);
     }
 
     // Give up - option to back out of quitting
@@ -195,6 +215,7 @@ public class Adventure {
             System.out.println("\033[0;33mReally? Hope to see you again soon. Bye.\033[0m");
             return "EXIT";
         } else {
+            updateStrengthPoints(-1);
             return "CONTINUE";
         }
     }
@@ -222,6 +243,7 @@ public class Adventure {
             if (currentRoom.getKnownWest() && currentRoom.getWestRoom() == null) {
                 System.out.println("\033[0;34mThe way West is blocked.\033[0m");
             }
+            updateStrengthPoints(-1);
             outputDescription();
             return "CONTINUE";
         } else {
@@ -244,10 +266,10 @@ public class Adventure {
     // Player inventory - with formatted output
 
     public void outputInventory() {
-        System.out.print("\033[0;34m");
+        System.out.print("\033[0;34mStrength is " + player.getStrengthPoints() + "% ");
         ArrayList<Item> objects = player.getPlayerItems();
         int size = objects.size();
-        System.out.print("You are carrying ");
+        System.out.print(":You are carrying ");
         if (size == 0) {
             System.out.println("nothing of use.");
         } else if (size == 1) {
@@ -298,6 +320,7 @@ public class Adventure {
         if (foundItem != null) {
             player.dropAnItem(foundItem); // first and only match removed from player
             player.currentRoom.addItemToRoom(foundItem); // and added to current room
+            updateStrengthPoints(-2);
         }
     }
 
@@ -313,6 +336,7 @@ public class Adventure {
         if (foundItem != null) {
             player.dropAnItem(foundItem); // first and only match removed from player
             player.currentRoom.addItemToRoom(foundItem); // and added to current room
+            updateStrengthPoints(-2);
         }
     }
 
@@ -325,6 +349,7 @@ public class Adventure {
         if (foundItem != null) {
             player.takeAnItem(foundItem); // first and only match removed from player
             player.currentRoom.takeItemFromRoom(foundItem); // and added to current room
+            updateStrengthPoints(-3);
         }
     }
 
@@ -340,6 +365,7 @@ public class Adventure {
         if (foundItem != null) {
             player.takeAnItem(foundItem); // first and only match removed from player
             player.currentRoom.takeItemFromRoom(foundItem); // and added to current room
+            updateStrengthPoints(-3);
         }
     }
 
@@ -405,4 +431,21 @@ public class Adventure {
         return (objects.contains(map.goldBar));
     }
 
+    public void getSomeRest() {
+        updateStrengthPoints(20);
+    }
+
+    // Actions use strength points, resting gains strength points
+
+    public void updateStrengthPoints(int update) {
+        int strength = player.getStrengthPoints();
+            strength += update;
+        if (strength > 100) {
+            strength = 100;
+            System.out.println("\033[;34mYou are fully rested!\033[0m");
+        } else if (strength < 1) {
+            strength = 0;
+        }
+        player.setStrengthPoints(strength);
+    }
 }

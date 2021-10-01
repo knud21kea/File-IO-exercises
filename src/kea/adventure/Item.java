@@ -23,7 +23,7 @@ public class Item {
     }
 
     public int getItemWeight() {
-        return itemWeight;
+        return this.itemWeight;
     }
 
     @Override
