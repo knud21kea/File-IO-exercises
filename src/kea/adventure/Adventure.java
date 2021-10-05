@@ -19,11 +19,12 @@ There is an achievable goal using the available commands.
 Change log for version 2:
 
 Added items that can be carried from room to room, dropped or taken.
-Added Strength points that are lost by doing actions and gained by resting.
+Added strength points that are lost by doing actions and gained by resting.
 Added weights to items.
 Added max carrying weight for player, meaning sometimes something must be dropped to take something else.
 Added more commands: Inventory player, Inventory room, Take item, Drop item, Show cheat sheet.
 Added mission that requires successful combination of available commands. Player can also die.
+Added music class
 
 ************************************************************************************************** */
 
