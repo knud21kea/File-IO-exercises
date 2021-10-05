@@ -10,7 +10,7 @@ public class Player {
     private Room requestedRoom;
     private ArrayList itemsPlayer; // Player inventory
     private int maxWeight = 25;
-    private int strengthPoints = 100;
+    private int strengthPoints = 10;
 
     public Player(Map map, Room start) {
         this.currentRoom = start; //map.getStarterRoom();

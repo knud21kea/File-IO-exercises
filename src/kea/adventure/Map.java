@@ -90,7 +90,7 @@ public class Map {
         startInventory.add(boxOfMatches);
         startInventory.add(paperClip);
         startInventory.add(silverKey);
-        startInventory.add(goldKey);
+
     }
 
     // Default start is in room 1 (now an argument in Player class)

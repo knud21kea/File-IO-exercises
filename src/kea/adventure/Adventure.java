@@ -91,25 +91,21 @@ public class Adventure {
 
         // Get inputs until user types exit/x or quit/q or game is won
 
-        while (!menuOption.equals("X") && !menuOption.equals("EXIT")) {
+        while (!menuOption.equals("X") && !menuOption.equals("EXIT") && !menuOption.equals("DEAD")) {
 
-            int currentStrength = player.getStrengthPoints();
-            if (currentStrength < 1) {
-                System.out.println("\033[0;31mYou are dead. You should have rested a while!!\033[0m");
-                menuOption = "X";
-            } else if (currentStrength < 20) {
-                System.out.println("\033[0;33mYou are exhausted, you really should rest a while!\033[0m");
-            } else if (currentStrength < 50) {
-                System.out.println("\033[0;32mYou are getting tired, maybe you should rest a while.\033[0m");
+            menuOption = getStrength();
+            if (!menuOption.equals("DEAD")) {
+                outputBasicDescription();
+                canMove = true; //used to only print blocked if user tries a blocked route
+                System.out.print("What do you want to do? ");
+                menuOption = input.nextLine().toUpperCase();
             }
-            outputBasicDescription();
-            canMove = true; //used to only print blocked if user tries a blocked route
-            System.out.print("What do you want to do? ");
-            menuOption = input.nextLine().toUpperCase();
 
             // Player choice with multiple command forms - had to drop the case switch
 
-            if (menuOption.equals("EXIT") || menuOption.equals("X") || menuOption.equals("QUIT") || menuOption.equals("Q")) {
+            if (menuOption.equals("DEAD")) {
+                playerDiedOfExhaustion();
+            } else if (menuOption.equals("EXIT") || menuOption.equals("X") || menuOption.equals("QUIT") || menuOption.equals("Q")) {
                 menuOption = endMessage();
             } else if (menuOption.equals("HELP") || menuOption.equals("H") || menuOption.equals("INFO")) {
                 getHelp();
@@ -155,23 +151,6 @@ public class Adventure {
 
     // Overload if user only types "go" or "g"
 
-    public boolean goSomewhere() {
-        boolean canMove = false;
-        System.out.print("Hmmm. Which direction do you want to go? ");
-        String direction = input.nextLine().toUpperCase();
-        if (direction.startsWith("N")) {
-            canMove = player.changeRoom("N");
-        } else if (direction.startsWith("E")) {
-            canMove = player.changeRoom("E");
-        } else if(direction.startsWith("S")) {
-            canMove = player.changeRoom("S");
-        } else if(direction.startsWith("W")) {
-            canMove = player.changeRoom("W");
-        }
-        updateStrengthPoints(-5);
-        return canMove;
-    }
-
     // Help info - only with the short commands
 
     public void getHelp() {
@@ -187,6 +166,7 @@ public class Adventure {
                 E - Go East
                 S - Go South
                 W - Go West
+                R - Rest
                 X - Exit
                 C - Cheat (how to win)\033[0m""");
         updateStrengthPoints(-1);
@@ -232,10 +212,43 @@ public class Adventure {
         }
     }
 
+    public String getStrength() {
+        int currentStrength = player.getStrengthPoints();
+        if (currentStrength < 1) {
+            return "DEAD";
+        } else if (currentStrength < 20) {
+            System.out.println("\033[0;33mYou are exhausted, you really should rest a while!\033[0m");
+        } else if (currentStrength < 50) {
+            System.out.println("\033[0;32mYou are getting tired, maybe you should rest a while.\033[0m");
+        }
+        return "ALIVE";
+    }
+
+    public void playerDiedOfExhaustion() {
+        System.out.println("\033[0;31mYou died of exhaustion. You really should have rested a while!!\033[0m");
+    }
+
     // Invalid input
 
     public void unknownCommand(String menuOption) {
         System.out.println("\033[0;33mI do not understand \"" + menuOption + "\".\033[0m");
+    }
+
+    public boolean goSomewhere() {
+        boolean canMove = false;
+        System.out.print("Hmmm. Which direction do you want to go? ");
+        String direction = input.nextLine().toUpperCase();
+        if (direction.startsWith("N")) {
+            canMove = player.changeRoom("N");
+        } else if (direction.startsWith("E")) {
+            canMove = player.changeRoom("E");
+        } else if(direction.startsWith("S")) {
+            canMove = player.changeRoom("S");
+        } else if(direction.startsWith("W")) {
+            canMove = player.changeRoom("W");
+        }
+        updateStrengthPoints(-5);
+        return canMove;
     }
 
     // Room description with an Easter egg - a way to beat the game
@@ -286,9 +299,9 @@ public class Adventure {
         if (size == 0) {
             System.out.println("nothing of use.");
         } else if (size == 1) {
-            System.out.println("1 item of weight " + getTotalWeight() + ": " + objects.get(0).getItemName() + ".");
+            System.out.println("1 item of weight " + getTotalWeight() + ":\n" + objects.get(0).getItemName() + ".");
         } else {
-            System.out.print(size + " items of weight " + getTotalWeight() + ": " + objects.get(0).getItemName());
+            System.out.print(size + " items of weight " + getTotalWeight() + ":\n" + objects.get(0).getItemName());
             for (int i = 1; i < size - 1; i++) {
                 System.out.print(", " + makeFirstLetterLowerCase(objects.get(i).getItemName()));
             }
@@ -308,9 +321,9 @@ public class Adventure {
         if (size == 0) {
             System.out.println("nothing of interest.");
         } else if (size == 1) {
-            System.out.println("1 item: " + objects.get(0).getItemName() + ".");
+            System.out.println("1 item:\n" + objects.get(0).getItemName() + ".");
         } else {
-            System.out.print(size + " items: " + objects.get(0).getItemName());
+            System.out.print(size + " items:\n" + objects.get(0).getItemName());
             for (int i = 1; i < size - 1; i++) {
                 System.out.print(", " + makeFirstLetterLowerCase(objects.get(i).getItemName()));
             }
