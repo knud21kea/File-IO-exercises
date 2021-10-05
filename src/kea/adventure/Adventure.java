@@ -40,6 +40,9 @@ public class Adventure {
     private boolean canMove;
 
     public static void main(String[] args) {
+        String filepath = "GameOfThrones.wav";
+        Music musicObject = new Music();
+        musicObject.playMusic(filepath);
 
         Adventure game = new Adventure();
         game.playGame();
