@@ -245,9 +245,9 @@ public class Adventure {
             canMove = player.changeRoom("N");
         } else if (direction.startsWith("E")) {
             canMove = player.changeRoom("E");
-        } else if(direction.startsWith("S")) {
+        } else if (direction.startsWith("S")) {
             canMove = player.changeRoom("S");
-        } else if(direction.startsWith("W")) {
+        } else if (direction.startsWith("W")) {
             canMove = player.changeRoom("W");
         }
         updateStrengthPoints(-5);
@@ -375,11 +375,7 @@ public class Adventure {
         System.out.print("Hmmm. Which item do you want to pick up? ");
         String itemToDrop = input.nextLine().toUpperCase();
         Item foundItem = getMatchingItemNames(itemToDrop, false);
-        if (foundItem != null) {
-            player.takeAnItem(foundItem); // first and only match removed from player
-            player.currentRoom.takeItemFromRoom(foundItem); // and added to current room
-            updateStrengthPoints(-3);
-        }
+        takeItemIfCan(foundItem);
     }
 
     // Takes item from room and adds to player if input string is matched to exactly 1 item
@@ -391,11 +387,29 @@ public class Adventure {
             menuItem = menuItem.substring(2); // command was "t string"
         }
         Item foundItem = getMatchingItemNames(menuItem, false);
+        takeItemIfCan(foundItem);
+    }
+
+    public void takeItemIfCan(Item foundItem) {
         if (foundItem != null) {
-            player.takeAnItem(foundItem); // first and only match removed from player
-            player.currentRoom.takeItemFromRoom(foundItem); // and added to current room
-            updateStrengthPoints(-3);
+            if (checkCanTakeFoundItem(foundItem)) {
+                moveItemFromRoomToPlayer(foundItem);
+                System.out.println("\033[0;34mTaken.\033[0m");
+                updateStrengthPoints(-2);
+            } else {
+                System.out.println("\033[0;31mThat item is too heavy to take without dropping something else.\033[0m");
+            }
+            updateStrengthPoints(-1);
         }
+    }
+
+    public boolean checkCanTakeFoundItem(Item item) {
+        return (item.getItemWeight() + getTotalWeight() <= player.getMaxWeight());
+    }
+
+    public void moveItemFromRoomToPlayer(Item foundItem) {
+        player.takeAnItem(foundItem); // first and only match added to player
+        player.currentRoom.takeItemFromRoom(foundItem); // and removed from current room
     }
 
     // common code for both player inventory and room inventory with boolean control
@@ -412,7 +426,7 @@ public class Adventure {
         } else {
             givenInventory = player.currentRoom.getRoomItems();
             text1 = "Hmmm. I cannot seem to see ";
-            text2 = "\033[0;34mTaking the ";
+            text2 = "\033[0;34mTrying to take the ";
         }
         ArrayList<String> foundItemNames = new ArrayList<>();
         Item foundItem = null; // default no item match
@@ -451,10 +465,12 @@ public class Adventure {
         }
         return weight;
     }
+
     public boolean checkForHolyWater() {
         ArrayList<Item> objects = map.catacombs.getRoomItems();
         return (objects.contains(map.holyWater));
     }
+
     public boolean checkForGoldBar() {
         ArrayList<Item> objects = map.catacombs.getRoomItems();
         return (objects.contains(map.goldBar));
@@ -468,7 +484,7 @@ public class Adventure {
 
     public void updateStrengthPoints(int update) {
         int strength = player.getStrengthPoints();
-            strength += update;
+        strength += update;
         if (strength > 100) {
             strength = 100;
             System.out.println("\033[;34mYou are fully rested!\033[0m");

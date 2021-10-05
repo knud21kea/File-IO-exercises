@@ -37,7 +37,7 @@ public class Map {
     Item holyWater = new Item("Some holy water", 10);
     Item oldParchment = new Item("An old parchment", 2);
     Item magneticCompass = new Item("A magnetic compass", 5);
-    Item boxOfMatches = new Item("A box of matches", 5);
+    Item boxOfMatches = new Item("A box of matches", 3);
     Item paperClip = new Item("A paper clip", 0);
 
     public Map() {
