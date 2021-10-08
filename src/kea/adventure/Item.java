@@ -2,8 +2,8 @@ package kea.adventure;
 
 public class Item {
 
-    private String itemName;
-    private int itemWeight;
+    protected String itemName;
+    protected int itemWeight;
 
     public Item(String itemName, int itemWeight) {
         this.itemName = itemName;

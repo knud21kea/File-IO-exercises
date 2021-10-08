@@ -33,12 +33,14 @@ public class Map {
     Item silverCoin = new Item("A silver coin", 1);
     Item goldKey = new Item("A gold key", 1);
     Item goldBar = new Item("A gold bar", 20);
-    Item anApple = new Item("An apple", 5);
     Item holyWater = new Item("Some holy water", 10);
     Item oldParchment = new Item("An old parchment", 2);
     Item magneticCompass = new Item("A magnetic compass", 5);
     Item boxOfMatches = new Item("A box of matches", 3);
     Item paperClip = new Item("A paper clip", 0);
+
+    Food anApple = new Food("An apple", 5, 10);
+    Food aPoisonApple = new Food("An apple", 5, -10);
 
     public Map() {
     }
@@ -77,7 +79,9 @@ public class Map {
         chancellery.addItemToRoom(brassLamp);
         ballroom.addItemToRoom(smallKnife);
         ballroom.addItemToRoom(emptyBottle);
-        banquet.addItemToRoom(anApple);
+        banquet.addItemToRoom(aPoisonApple);
+        courtyard.addItemToRoom(anApple);
+        //courtyard.addItemToRoom(anApple);
         banquet.addItemToRoom(silverCoin);
         banquet.addItemToRoom(goldBar);
         apartment.addItemToRoom(goldKey);

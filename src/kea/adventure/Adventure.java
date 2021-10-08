@@ -130,6 +130,8 @@ public class Adventure {
                 takeSomething();
             } else if (menuOption.startsWith("TAKE ") || menuOption.startsWith("T ")) {
                 takeItem(menuOption);
+            } else if (menuOption.equals("EAT")) {
+                eatSomething();
             } else if (menuOption.equals("GO") || menuOption.equals("G")) {
                 canMove = goSomewhere();
             } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N") || menuOption.equals("GO N")) {
@@ -167,6 +169,7 @@ public class Adventure {
                 I - List inventory
                 T - Take item
                 D - Drop item
+                Eat - Eat item
                 N - Go North
                 E - Go East
                 S - Go South
@@ -456,6 +459,15 @@ public class Adventure {
             System.out.println("Could you give me more of a clue?");
         }
         return foundItem; // null unless only one match
+    }
+
+    public void eatSomething() {
+        System.out.print("Hmmm. Which item do you want to eat? ");
+        String itemToEat = input.nextLine().toUpperCase();
+        Item foundItem = getMatchingItemNames(itemToEat, true);
+        if (foundItem != null) {
+            //player.eatAnItem(foundItem); // first and only match removed from player;
+        }
     }
 
     // return total weight of inventory. Not used for anything yet.
