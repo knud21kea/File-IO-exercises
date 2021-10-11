@@ -8,4 +8,15 @@ public class Food extends Item {
         super(itemName, itemWeight);
         this.foodValue = foodValue;
     }
+
+
+    public int getfoodValue() {
+
+        return foodValue;
+    }
+
+    public void setfoodValue(int health) {
+
+        this.foodValue = foodValue;
+    }
 }
