@@ -17,11 +17,16 @@
 package kea.adventure;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class Map {
 
-    public Room courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel;
-    public ArrayList<Item> startInventory = new ArrayList<>();
+    private Room courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel;
+    private ArrayList<Room> rooms = new ArrayList<>();
+    private ArrayList<Item> startInventory = new ArrayList<>();
+    private Random rand = new Random();
 
     // Create all instances of Item class
     // Some names have duplicates to test the parser - key, gold, silver etc.
@@ -44,12 +49,9 @@ public class Map {
     Food aPear = new Food("A ripe pear", 5, 5);
 
     Weapon sword = new meleeWeapon("A sword", 2,5,9999);
-    Weapon axe = new meleeWeapon("axe", 3, 3, 9999);
+    Weapon axe = new meleeWeapon("An axe", 3, 3, 9999);
 
-    Enemy enemy = new Enemy("orc",10, axe);
-
-
-
+    Enemy enemy = new Enemy("An orc",10, axe);
 
     public Map() {
     }
@@ -67,6 +69,8 @@ public class Map {
         hall = new Room("a small hall", "The walls are clad with seven intricately woven tapestries.");
         casements = new Room("the casements", "Gloomy, cold and damp. There are signs that horses and soldiers have been here.");
         chapel = new Room("a chapel", "A small place of worship with well preserved original altar, gallery, and pews.");
+        List<Room> roomList = Arrays.asList(courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel);
+        rooms.addAll(roomList);
 
         // Make connections - auto 2 way
 
@@ -104,8 +108,6 @@ public class Map {
         startInventory.add(boxOfMatches);
         startInventory.add(paperClip);
         startInventory.add(silverKey);
-
-
     }
 
     // Default start is in room 1 (now an argument in Player class)
@@ -118,6 +120,14 @@ public class Map {
 
     public Room getSpecialRoom() {
         return catacombs;
+    }
+
+    public Room getRandomRoom(Room currentRoom) {
+        Room randomRoom = catacombs;
+        while (randomRoom == catacombs || randomRoom == currentRoom) {
+            randomRoom = rooms.get(rand.nextInt(9));
+        }
+        return randomRoom; // Returns random room that is neither catacombs nor current room
     }
 
     // Testing inventory. Probably should start without items.

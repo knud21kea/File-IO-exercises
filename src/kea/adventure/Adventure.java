@@ -72,8 +72,8 @@ public class Adventure {
         map = new Map();
         map.buildMap();
         map.addStarterItems();
-        player = new Player(map, map.courtyard);
-        holger = new Player(map, map.catacombs); // Not used
+        player = new Player(map, map.getStarterRoom());
+        holger = new Player(map, map.getSpecialRoom()); // Not used
     }
 
     public void playGame() {
@@ -131,7 +131,7 @@ public class Adventure {
             } else if (menuOption.equals("INVENTORY") || menuOption.equals("INV") || menuOption.equals("I")) {
                 outputInventory();
             } else if (menuOption.equals("EXPLORE") || menuOption.equals("LOOK") || menuOption.equals("L")) {
-                menuOption = lookAround(player.currentRoom, map.getSpecialRoom());
+                menuOption = lookAround(player.getCurrentRoom(), map.getSpecialRoom());
             } else if (menuOption.equals("DROP") || menuOption.equals("D")) {
                 dropSomething();
             } else if (menuOption.startsWith("DROP ") || menuOption.startsWith("D ")) {
@@ -306,8 +306,8 @@ public class Adventure {
 
     public void outputBasicDescription() {
         System.out.print("\nStrength " + player.getStrengthPoints() + "% ");
-        System.out.print(":You are in " + player.currentRoom.getRoomName() + ": ");
-        System.out.println(player.currentRoom.getRoomDescription());
+        System.out.print(":You are in " + player.getCurrentRoom().getRoomName() + ": ");
+        System.out.println(player.getCurrentRoom().getRoomDescription());
     }
 
     // Player inventory - with formatted output
@@ -336,7 +336,7 @@ public class Adventure {
 
     public void outputDescription() {
         System.out.print("\033[0;34m");
-        ArrayList<Item> objects = player.currentRoom.getRoomItems();
+        ArrayList<Item> objects = player.getCurrentRoom().getRoomItems();
         int size = objects.size();
         System.out.print("You can see ");
         if (size == 0) {
@@ -366,7 +366,7 @@ public class Adventure {
         Item foundItem = getMatchingItemNames(itemToDrop, "drop");
         if (foundItem != null) {
             player.dropAnItem(foundItem); // first and only match removed from player
-            player.currentRoom.addItemToRoom(foundItem); // and added to current room
+            player.getCurrentRoom().addItemToRoom(foundItem); // and added to current room
             updateStrengthPoints(-2);
         }
     }
@@ -382,7 +382,7 @@ public class Adventure {
         Item foundItem = getMatchingItemNames(menuItem, "drop");
         if (foundItem != null) {
             player.dropAnItem(foundItem); // first and only match removed from player
-            player.currentRoom.addItemToRoom(foundItem); // and added to current room
+            player.getCurrentRoom().addItemToRoom(foundItem); // and added to current room
             updateStrengthPoints(-2);
         }
     }
@@ -427,7 +427,7 @@ public class Adventure {
 
     public void moveItemFromRoomToPlayer(Item foundItem) {
         player.takeAnItem(foundItem); // first and only match added to player
-        player.currentRoom.takeItemFromRoom(foundItem); // and removed from current room
+        player.getCurrentRoom().takeItemFromRoom(foundItem); // and removed from current room
     }
 
     // common code for both player inventory and room inventory with boolean control
@@ -442,7 +442,7 @@ public class Adventure {
             text1 = "Hmmm. You do not seem to have ";
             text2 = "\033[0;34mDropping the ";
         } else if (Objects.equals(action, "take")) {
-            givenInventory = player.currentRoom.getRoomItems();
+            givenInventory = player.getCurrentRoom().getRoomItems();
             text1 = "Hmmm. I cannot seem to see ";
             text2 = "\033[0;34mTrying to take the ";
         } else {
@@ -500,7 +500,7 @@ public class Adventure {
     public void eatCommon(Item foundItem) {
         if (foundItem != null) {
             if (foundItem instanceof Food) {
-                int strength = ((Food) foundItem).foodValue; // Cast item to food
+                int strength = ((Food) foundItem).getfoodValue(); // Cast item to food
                 if (strength < 0) {
                     System.out.println("\033[0;31mEaten. You lost " + -strength + " strength :(\033[0m");
                 } else {
@@ -508,6 +508,7 @@ public class Adventure {
                 }
                 updateStrengthPoints(strength);
                 player.dropAnItem(foundItem); // first and only match removed from player;
+                map.getRandomRoom(player.getCurrentRoom()).addItemToRoom(foundItem); // Eaten food respawns somewhere else
             } else {
                 System.out.println("\033[0;31mYou cannot eat that.\033[0m");
             }
@@ -525,12 +526,12 @@ public class Adventure {
     }
 
     public boolean checkForHolyWater() {
-        ArrayList<Item> objects = map.catacombs.getRoomItems();
+        ArrayList<Item> objects = map.getSpecialRoom().getRoomItems();
         return (objects.contains(map.holyWater));
     }
 
     public boolean checkForGoldBar() {
-        ArrayList<Item> objects = map.catacombs.getRoomItems();
+        ArrayList<Item> objects = map.getSpecialRoom().getRoomItems();
         return (objects.contains(map.goldBar));
     }
 

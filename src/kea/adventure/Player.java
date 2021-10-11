@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Player {
 
-    public Room currentRoom;
+    private Room getCurrentRoom;
     private Room requestedRoom;
     private ArrayList itemsPlayer; // Player inventory
 
@@ -14,7 +14,7 @@ public class Player {
     private int strengthPoints = 100;
 
     public Player(Map map, Room start) {
-        this.currentRoom = start; //map.getStarterRoom();
+        this.getCurrentRoom = start; //map.getStarterRoom();
         this.itemsPlayer = map.getInitialInventory();
     }
 
@@ -22,16 +22,20 @@ public class Player {
 
     public boolean changeRoom(String direction) {
         switch (direction) {
-            case "N" -> requestedRoom = this.currentRoom.getNorthRoom();
-            case "E" -> requestedRoom = this.currentRoom.getEastRoom();
-            case "S" -> requestedRoom = this.currentRoom.getSouthRoom();
-            case "W" -> requestedRoom = this.currentRoom.getWestRoom();
+            case "N" -> requestedRoom = this.getCurrentRoom.getNorthRoom();
+            case "E" -> requestedRoom = this.getCurrentRoom.getEastRoom();
+            case "S" -> requestedRoom = this.getCurrentRoom.getSouthRoom();
+            case "W" -> requestedRoom = this.getCurrentRoom.getWestRoom();
         }
         if (requestedRoom != null) {
-            this.currentRoom = requestedRoom; // move to new room
+            this.getCurrentRoom = requestedRoom; // move to new room
             return true;
         }
         return false;
+    }
+
+    public Room getCurrentRoom() {
+        return this.getCurrentRoom;
     }
 
     // Player inventory list
