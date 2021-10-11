@@ -42,6 +42,14 @@ public class Map {
     Food anApple = new Food("An apple", 5, 10);
     Food aPoisonApple = new Food("An apple", 5, -10);
 
+    Weapon sword = new meleeWeapon("A sword", 2,5,9999);
+    Weapon axe = new meleeWeapon("axe", 3, 3, 9999);
+
+    Enemy enemy = new Enemy("orc",10, axe);
+
+
+
+
     public Map() {
     }
 
@@ -75,7 +83,6 @@ public class Map {
     public void addStarterItems() {
 
         // Place items in rooms
-
         chancellery.addItemToRoom(brassLamp);
         ballroom.addItemToRoom(smallKnife);
         ballroom.addItemToRoom(emptyBottle);
@@ -88,12 +95,15 @@ public class Map {
         hall.addItemToRoom(oldParchment);
         chapel.addItemToRoom(holyWater);
 
+        courtyard.addItemToRoom(sword);
+        chancellery.putEnemyInRoom(enemy);
         // Items the player has to start with
 
         startInventory.add(magneticCompass);
         startInventory.add(boxOfMatches);
         startInventory.add(paperClip);
         startInventory.add(silverKey);
+
 
     }
 

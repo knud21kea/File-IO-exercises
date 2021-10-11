@@ -10,6 +10,7 @@ public class Room {
     private Room north, east, west, south;
     private boolean knownNorth, knownEast, knownSouth, knownWest;
     private ArrayList<Item> items = new ArrayList<>(); // List of Item objects that are in the room
+    private Enemy enemy;
 
 
     public Room(String roomName, String roomDescription) {
@@ -37,6 +38,18 @@ public class Room {
     // Take item from room
     public void takeItemFromRoom(Item item) {
         this.items.remove(item);
+    }
+    public void putEnemyInRoom(Enemy enemy) {
+        Room currentRoom = this;
+        this.enemy = enemy ;
+    }
+    public void removeEnemyFromRoom() {
+        Room currentRoom = this;
+        this.enemy = null;
+    }
+
+    public Enemy getEnemy() {
+        return enemy;
     }
 
     // connect two rooms South to North
