@@ -1,5 +1,5 @@
 
-/* *************************************************************************************************
+/* ####################################################################################################
 
                                    --  Adventure (part 2) --
 
@@ -27,7 +27,15 @@ Added mission that requires successful combination of available commands. Player
 Added music class
 Added context colours for text
 
-************************************************************************************************** */
+Change log for version 3:
+
+Added food as extension to item, with both positive and negative food values
+Added Weapon as an extension to item, with sub-classes meleeWeapon and shootingWeapon (todo)
+Added Enemy as new class with ability to equip weapons (todo)
+Added combat system (todo)
+Added commands: Eat, Attack (todo)
+
+################################################################################################################ */
 
 package kea.adventure;
 
@@ -43,6 +51,7 @@ public class Adventure {
     private boolean canMove;
 
     public static void main(String[] args) {
+
         String filepath = "GameOfThrones.wav";
         Music musicObject = new Music();
         musicObject.playMusic(filepath);
@@ -64,7 +73,7 @@ public class Adventure {
         map.buildMap();
         map.addStarterItems();
         player = new Player(map, map.courtyard);
-        holger = new Player(map, map.catacombs);
+        holger = new Player(map, map.catacombs); // Not used
     }
 
     public void playGame() {
@@ -186,11 +195,12 @@ public class Adventure {
     public void showSpoiler() {
         System.out.println("""
                 \033[4;33m
-                ******************** Spoiler Alert ********************\033[0;33m
+                ###################### Spoiler Alert ##########################\033[0;33m
                 The catacomb is a special room.
                 If you try to look around there without completing the task, you will lose.
                 The task is just to find and move a gold bar and some holy water to the room.
-                To win you must first drop these items and then look around.\033[0m                                
+                To win you must first drop these items and then look around.\033[4;33m
+                ## This option reduces your strength points ##\033[0m                                
                      ___________________     __________________     __________________
                      |                  |    |                 |    |                 |
                      |    Courtyard     | == |   Chancellery   | == |    Ballroom     |
