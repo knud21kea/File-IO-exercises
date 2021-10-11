@@ -32,6 +32,7 @@ Added context colours for text
 package kea.adventure;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Adventure {
@@ -130,8 +131,10 @@ public class Adventure {
                 takeSomething();
             } else if (menuOption.startsWith("TAKE ") || menuOption.startsWith("T ")) {
                 takeItem(menuOption);
-            } else if (menuOption.equals("EAT")) {
+            } else if (menuOption.equals("EAT") || menuOption.equals("F")) {
                 eatSomething();
+            } else if (menuOption.startsWith("EAT ") || menuOption.startsWith("F ")) {
+                eatFood(menuOption);
             } else if (menuOption.equals("GO") || menuOption.equals("G")) {
                 canMove = goSomewhere();
             } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N") || menuOption.equals("GO N")) {
@@ -169,7 +172,7 @@ public class Adventure {
                 I - List inventory
                 T - Take item
                 D - Drop item
-                Eat - Eat item
+                F - Eat food
                 N - Go North
                 E - Go East
                 S - Go South
@@ -350,7 +353,7 @@ public class Adventure {
     public void dropSomething() {
         System.out.print("Hmmm. Which item do you want to drop? ");
         String itemToDrop = input.nextLine().toUpperCase();
-        Item foundItem = getMatchingItemNames(itemToDrop, true);
+        Item foundItem = getMatchingItemNames(itemToDrop, "drop");
         if (foundItem != null) {
             player.dropAnItem(foundItem); // first and only match removed from player
             player.currentRoom.addItemToRoom(foundItem); // and added to current room
@@ -366,7 +369,7 @@ public class Adventure {
         } else {
             menuItem = menuItem.substring(2); // command was "d string"
         }
-        Item foundItem = getMatchingItemNames(menuItem, true);
+        Item foundItem = getMatchingItemNames(menuItem, "drop");
         if (foundItem != null) {
             player.dropAnItem(foundItem); // first and only match removed from player
             player.currentRoom.addItemToRoom(foundItem); // and added to current room
@@ -379,7 +382,7 @@ public class Adventure {
     public void takeSomething() {
         System.out.print("Hmmm. Which item do you want to pick up? ");
         String itemToDrop = input.nextLine().toUpperCase();
-        Item foundItem = getMatchingItemNames(itemToDrop, false);
+        Item foundItem = getMatchingItemNames(itemToDrop, "take");
         takeItemIfCan(foundItem);
     }
 
@@ -391,7 +394,7 @@ public class Adventure {
         } else {
             menuItem = menuItem.substring(2); // command was "t string"
         }
-        Item foundItem = getMatchingItemNames(menuItem, false);
+        Item foundItem = getMatchingItemNames(menuItem, "take");
         takeItemIfCan(foundItem);
     }
 
@@ -421,17 +424,21 @@ public class Adventure {
     // loops through the objects in the given list and check if search is found in an item name
     // there may be found no, one or multiple items
 
-    public Item getMatchingItemNames(String searchFor, boolean drop) {
-        String text1, text2; // only minor difference between drop and take
+    public Item getMatchingItemNames(String searchFor, String action) {
+        String text1, text2; // only minor difference between drop, take and eat
         ArrayList<Item> givenInventory;
-        if (drop) {
+        if (Objects.equals(action, "drop")) {
             givenInventory = player.getPlayerItems();
             text1 = "Hmmm. You do not seem to have ";
             text2 = "\033[0;34mDropping the ";
-        } else {
+        } else if (Objects.equals(action, "take")) {
             givenInventory = player.currentRoom.getRoomItems();
             text1 = "Hmmm. I cannot seem to see ";
             text2 = "\033[0;34mTrying to take the ";
+        } else {
+            givenInventory = player.getPlayerItems();
+            text1 = "Hmmm. You do not seem to have ";
+            text2 = "\033[0;34mTrying to eat the ";
         }
         ArrayList<String> foundItemNames = new ArrayList<>();
         Item foundItem = null; // default no item match
@@ -461,12 +468,39 @@ public class Adventure {
         return foundItem; // null unless only one match
     }
 
+    // Overload eatFood when user types only "eat"
+
     public void eatSomething() {
         System.out.print("Hmmm. Which item do you want to eat? ");
         String itemToEat = input.nextLine().toUpperCase();
-        Item foundItem = getMatchingItemNames(itemToEat, true);
+        Item foundItem = getMatchingItemNames(itemToEat, "eat");
+        eatCommon(foundItem);
+    }
+
+    public void eatFood(String menuItem) {
+        if (menuItem.startsWith("EAT ")) {
+            menuItem = menuItem.substring(5); // command was "eat string"
+        } else {
+            menuItem = menuItem.substring(2); // command was "f string" (food)
+        }
+        Item foundItem = getMatchingItemNames(menuItem, "eat");
+        eatCommon(foundItem);
+    }
+
+    public void eatCommon(Item foundItem) {
         if (foundItem != null) {
-            //player.eatAnItem(foundItem); // first and only match removed from player;
+            if (foundItem instanceof Food) {
+                int strength = ((Food) foundItem).foodValue; // Cast item to food
+                if (strength < 0) {
+                    System.out.println("\033[0;31mEaten. You lost " + -strength + " strength :(\033[0m");
+                } else {
+                    System.out.println("\033[0;34mEaten. You gained " + strength + " strength :)\033[0m");
+                }
+                updateStrengthPoints(strength);
+                player.dropAnItem(foundItem); // first and only match removed from player;
+            } else {
+                System.out.println("\033[0;31mYou cannot eat that.\033[0m");
+            }
         }
     }
 

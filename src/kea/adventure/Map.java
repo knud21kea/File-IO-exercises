@@ -39,8 +39,9 @@ public class Map {
     Item boxOfMatches = new Item("A box of matches", 3);
     Item paperClip = new Item("A paper clip", 0);
 
-    Food anApple = new Food("An apple", 5, 10);
-    Food aPoisonApple = new Food("An apple", 5, -10);
+    Food anApple = new Food("A green apple", 5, 10);
+    Food aPoisonApple = new Food("A red apple", 5, -10);
+    Food aPear = new Food("A ripe pear", 5, 5);
 
     public Map() {
     }
@@ -81,7 +82,7 @@ public class Map {
         ballroom.addItemToRoom(emptyBottle);
         banquet.addItemToRoom(aPoisonApple);
         courtyard.addItemToRoom(anApple);
-        //courtyard.addItemToRoom(anApple);
+        apartment.addItemToRoom(aPear);
         banquet.addItemToRoom(silverCoin);
         banquet.addItemToRoom(goldBar);
         apartment.addItemToRoom(goldKey);
