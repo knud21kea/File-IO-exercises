@@ -324,7 +324,12 @@ public class Adventure {
         if (weapon == null) {
             System.out.print("and you are unarmed.");
         } else {
-            System.out.print("and you are equipped with " + makeFirstLetterLowerCase(weapon.getItemName()) + " which does " + weapon.getDamage() + " damage.");
+            System.out.print("and you are equipped with " + makeFirstLetterLowerCase(weapon.getItemName()));
+            System.out.print(" which does " + weapon.getDamage() + " damage");
+            if (!weapon.checkIfMelee()) {
+                System.out.print(" and has " + weapon.getAmmo() + " shots remaining");
+            }
+            System.out.print(".");
         }
         ArrayList<Item> objects = player.getPlayerItems();
         int size = objects.size();

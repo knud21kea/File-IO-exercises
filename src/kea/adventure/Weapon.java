@@ -27,6 +27,10 @@ public abstract class Weapon extends Item {
         this.ammo = ammo;
     }
 
+    public boolean checkIfMelee() {
+        return true;
+    }
+
     public void shootWeapon() {
 
     }
