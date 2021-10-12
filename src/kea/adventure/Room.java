@@ -10,6 +10,7 @@ public class Room {
     private Room north, east, west, south;
     private boolean knownNorth, knownEast, knownSouth, knownWest;
     private ArrayList<Item> items = new ArrayList<>(); // List of Item objects that are in the room
+    private ArrayList<Enemy> enemies = new ArrayList<>(); // List of Enemy objects that are in the room
     private Enemy enemy;
 
 
@@ -30,6 +31,10 @@ public class Room {
         return this.items;
     }
 
+    public ArrayList<Enemy> getRoomEnemies() {
+        return this.enemies;
+    }
+
     // Add item to room
     public void addItemToRoom(Item item) {
         this.items.add(item);
@@ -38,11 +43,13 @@ public class Room {
     // Take item from room
     public void takeItemFromRoom(Item item) {
         this.items.remove(item);
+
     }
+
     public void putEnemyInRoom(Enemy enemy) {
-        Room currentRoom = this;
-        this.enemy = enemy ;
+        this.enemies.add(enemy);
     }
+
     public void removeEnemyFromRoom() {
         Room currentRoom = this;
         this.enemy = null;

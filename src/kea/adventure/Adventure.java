@@ -352,7 +352,7 @@ public class Adventure {
         int size = objects.size();
         System.out.print("You can see ");
         if (size == 0) {
-            System.out.println("nothing of interest.");
+            System.out.println("no items.");
         } else if (size == 1) {
             System.out.println("1 item:\n" + objects.get(0).getItemName() + ".");
         } else {
@@ -361,6 +361,13 @@ public class Adventure {
                 System.out.print(", " + makeFirstLetterLowerCase(objects.get(i).getItemName()));
             }
             System.out.println(" and " + makeFirstLetterLowerCase(objects.get(size - 1).getItemName()) + ".");
+        }
+        ArrayList<Enemy> enemies = player.getCurrentRoom().getRoomEnemies();
+        if (enemies.size() > 0) {
+            System.out.print("There is an enemy here, " + makeFirstLetterLowerCase(enemies.get(0).getEnemyName()));
+            System.out.println(", with " + makeFirstLetterLowerCase(enemies.get(0).getWeaponName()));
+        } else {
+            System.out.println("There are no enemies here.");
         }
         System.out.print("\033[0m");
     }

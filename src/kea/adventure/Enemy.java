@@ -10,22 +10,26 @@ public class Enemy {
     private String enemyName;
     public Room currentRoom;
     private int health;
-    private Weapon weaponName;
+    private String weaponName;
     private boolean isDead;
 
-    public Enemy(String enemyName, int health, Weapon weaponName) {
+    public Enemy(String enemyName, int health, Weapon weapon) {
         this.isDead = isDead;
         isDead = false;
         this.enemyInventory = new ArrayList<>();
-        enemyInventory.add(weaponName);
+        enemyInventory.add(weapon);
         this.enemyName = enemyName;
         this.currentRoom = currentRoom;
         this.health = health;
-        this.weaponName = weaponName;
+        this.weaponName = weapon.getItemName();
 
     }
 
-    public Weapon getWeaponName() {
+    public String getEnemyName() {
+        return this.enemyName;
+    }
+
+    public String getWeaponName() {
         return weaponName;
     }
 
