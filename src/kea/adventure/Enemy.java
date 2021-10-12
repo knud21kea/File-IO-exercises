@@ -2,27 +2,18 @@ package kea.adventure;
 
 import java.util.ArrayList;
 
-import java.util.ArrayList;
-
 public class Enemy {
 
-    public ArrayList<Item> enemyInventory;
-    private String enemyName;
-    public Room currentRoom;
+    private ArrayList<Item> enemyInventory = new ArrayList<>();
+    private String enemyName, weaponName;
     private int health;
-    private String weaponName;
-    private boolean isDead;
+    private boolean isDead = false;
 
     public Enemy(String enemyName, int health, Weapon weapon) {
-        this.isDead = isDead;
-        isDead = false;
-        this.enemyInventory = new ArrayList<>();
-        enemyInventory.add(weapon);
         this.enemyName = enemyName;
-        this.currentRoom = currentRoom;
         this.health = health;
         this.weaponName = weapon.getItemName();
-
+        enemyInventory.add(weapon);
     }
 
     public String getEnemyName() {
@@ -37,21 +28,13 @@ public class Enemy {
         return health;
     }
 
-    public int changeInHealth(int healthPoint) {
-        this.health = health + healthPoint;
-
-        return health;
-    }
-
-
-    public Enemy getEnemyCurrentRoom() {
-        Enemy enemy = currentRoom.getEnemy();
-        return enemy;
+    public void changeInHealth(int healthPoint) {
+        this.health += healthPoint;
     }
 
     @Override
     public String toString() {
-        return "\nOther lifeforms on this planet: " + enemyName;
+        return "Other lifeforms on this planet: " + enemyName;
     }
 }
 

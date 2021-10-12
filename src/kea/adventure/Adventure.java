@@ -365,7 +365,8 @@ public class Adventure {
         ArrayList<Enemy> enemies = player.getCurrentRoom().getRoomEnemies();
         if (enemies.size() > 0) {
             System.out.print("There is an enemy here, " + makeFirstLetterLowerCase(enemies.get(0).getEnemyName()));
-            System.out.println(", with " + makeFirstLetterLowerCase(enemies.get(0).getWeaponName()));
+            System.out.print(", with " + makeFirstLetterLowerCase(enemies.get(0).getWeaponName()));
+            System.out.println(", and health "+ enemies.get(0).getEnemyHealth() + ".");
         } else {
             System.out.println("There are no enemies here.");
         }

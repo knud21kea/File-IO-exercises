@@ -50,11 +50,11 @@ public class Map {
     Food aPoisonApple = new Food("A red apple", 5, -10);
     Food aPear = new Food("A ripe pear", 5, 5);
 
-    Weapon knife = new meleeWeapon("A blunt knife", 2, 0, 0);
-    Weapon sword = new meleeWeapon("A sword", 2, 5, 9999);
-    Weapon axe = new meleeWeapon("An axe", 3, 3, 9999);
+    Weapon knife = new meleeWeapon("A blunt knife", 5, 1, 0);
+    Weapon sword = new meleeWeapon("A sword", 10, 15, 0);
+    Weapon axe = new meleeWeapon("An axe", 15, 25, 0);
 
-    Enemy enemy = new Enemy("An orc", 10, axe);
+    Enemy enemy = new Enemy("An orc", 50, axe);
 
     public Map() {
     }
