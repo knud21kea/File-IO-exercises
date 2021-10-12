@@ -330,18 +330,17 @@ public class Adventure {
         int size = objects.size();
         System.out.print("\nYou are carrying ");
         if (size == 0) {
-            System.out.println("nothing of use.");
+            System.out.println("no items of total weight " + getTotalWeight() + " including any equipped weapons.");
         } else if (size == 1) {
-            System.out.println("1 item of weight " + getTotalWeight() + ":\n" + objects.get(0).getItemName() + ".");
+            System.out.println("1 item of total weight " + getTotalWeight() + " including any equipped weapons:\n" + objects.get(0).getItemName() + ".");
         } else {
-            System.out.print(size + " items of weight " + getTotalWeight() + ":\n" + objects.get(0).getItemName());
+            System.out.print(size + " items of total weight " + getTotalWeight() + " including any equipped weapons:\n" + objects.get(0).getItemName());
             for (int i = 1; i < size - 1; i++) {
                 System.out.print(", " + makeFirstLetterLowerCase(objects.get(i).getItemName()));
             }
             System.out.println(" and " + makeFirstLetterLowerCase(objects.get(size - 1).getItemName()) + ".");
         }
         System.out.print("\033[0m");
-        getTotalWeight();
     }
 
     // Room inventory - with formatted output
@@ -564,6 +563,9 @@ public class Adventure {
         int weight = 0;
         for (int i = 0; i < objects.size(); i++) {
             weight += (objects.get(i).getItemWeight());
+        }
+        if (player.getEquippedWeapon() != null) {
+            weight += player.getEquippedWeapon().itemWeight;
         }
         return weight;
     }
