@@ -26,6 +26,8 @@ public class Map {
     private Room courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel;
     private ArrayList<Room> rooms = new ArrayList<>();
     private ArrayList<Item> startInventory = new ArrayList<>();
+    private ArrayList<Food> foods = new ArrayList<>();
+    private ArrayList<Weapon> weapons = new ArrayList<>();
     private Random rand = new Random();
 
     // Create all instances of Item class
@@ -48,10 +50,11 @@ public class Map {
     Food aPoisonApple = new Food("A red apple", 5, -10);
     Food aPear = new Food("A ripe pear", 5, 5);
 
-    Weapon sword = new meleeWeapon("A sword", 2,5,9999);
+    Weapon knife = new meleeWeapon("A blunt knife", 2, 0, 0);
+    Weapon sword = new meleeWeapon("A sword", 2, 5, 9999);
     Weapon axe = new meleeWeapon("An axe", 3, 3, 9999);
 
-    Enemy enemy = new Enemy("An orc",10, axe);
+    Enemy enemy = new Enemy("An orc", 10, axe);
 
     public Map() {
     }
@@ -69,8 +72,13 @@ public class Map {
         hall = new Room("a small hall", "The walls are clad with seven intricately woven tapestries.");
         casements = new Room("the casements", "Gloomy, cold and damp. There are signs that horses and soldiers have been here.");
         chapel = new Room("a chapel", "A small place of worship with well preserved original altar, gallery, and pews.");
+
         List<Room> roomList = Arrays.asList(courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel);
         rooms.addAll(roomList);
+        List<Food> foodList = Arrays.asList(anApple, aPoisonApple, aPear);
+        foods.addAll(foodList);
+        List<Weapon> weaponList = Arrays.asList(knife, sword, axe);
+        weapons.addAll(weaponList);
 
         // Make connections - auto 2 way
 
@@ -134,6 +142,14 @@ public class Map {
 
     public ArrayList<Item> getInitialInventory() {
         return startInventory;
-        }
     }
+
+    public boolean isWeapon(Item item) {
+        return (weapons.contains(item));
+    }
+
+    public boolean isFood(Item item) {
+        return (foods.contains(item));
+    }
+}
 

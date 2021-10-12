@@ -12,10 +12,12 @@ public class Player {
 
     private final int maxWeight = 25;
     private int strengthPoints = 100;
+    private Weapon equippedWeapon;
 
-    public Player(Map map, Room start) {
+    public Player(Map map, Room start, Weapon weapon) {
         this.getCurrentRoom = start; //map.getStarterRoom();
         this.itemsPlayer = map.getInitialInventory();
+        this.equippedWeapon = weapon;
     }
 
     // Player moves in the given direction or finds the way blocked
@@ -66,6 +68,18 @@ public class Player {
 
     public int getMaxWeight() {
         return this.maxWeight;
+    }
+
+    public Weapon getEquippedWeapon() {
+        return this.equippedWeapon;
+    }
+
+    public void setEquippedWeapon(Weapon weapon) {
+        if (this.equippedWeapon != null) {
+            this.itemsPlayer.add(equippedWeapon);
+        }
+        this.equippedWeapon = weapon;
+        this.itemsPlayer.remove(weapon);
     }
 }
 

@@ -72,8 +72,8 @@ public class Adventure {
         map = new Map();
         map.buildMap();
         map.addStarterItems();
-        player = new Player(map, map.getStarterRoom());
-        holger = new Player(map, map.getSpecialRoom()); // Not used
+        player = new Player(map, map.getStarterRoom(), null); // Start unarmed
+        holger = new Player(map, map.getSpecialRoom(), map.axe); // Not used
     }
 
     public void playGame() {
@@ -144,6 +144,10 @@ public class Adventure {
                 eatSomething();
             } else if (menuOption.startsWith("EAT ") || menuOption.startsWith("F ")) {
                 eatFood(menuOption);
+            } else if (menuOption.equals("EQUIP") || menuOption.equals("A")) {
+                equipSomething();
+            } else if (menuOption.equals("UNEQUIP") || menuOption.equals("U")) {
+                unequipWeapon();
             } else if (menuOption.equals("GO") || menuOption.equals("G")) {
                 canMove = goSomewhere();
             } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N") || menuOption.equals("GO N")) {
@@ -181,7 +185,9 @@ public class Adventure {
                 I - List inventory
                 T - Take item
                 D - Drop item
-                F - Eat food
+                F - Eat (food)
+                A - Equip weapon (arm)
+                U - Unequip weapon (disarm)
                 N - Go North
                 E - Go East
                 S - Go South
@@ -313,10 +319,16 @@ public class Adventure {
     // Player inventory - with formatted output
 
     public void outputInventory() {
-        System.out.print("\033[0;34mStrength is " + player.getStrengthPoints() + "% ");
+        System.out.print("\033[0;34mYour strength is at " + player.getStrengthPoints() + "% ");
+        Weapon weapon = player.getEquippedWeapon();
+        if (weapon == null) {
+            System.out.print("and you are unarmed.");
+        } else {
+            System.out.print("and you are equipped with " + makeFirstLetterLowerCase(weapon.getItemName()) + ".");
+        }
         ArrayList<Item> objects = player.getPlayerItems();
         int size = objects.size();
-        System.out.print(":You are carrying ");
+        System.out.print("\nYou are carrying ");
         if (size == 0) {
             System.out.println("nothing of use.");
         } else if (size == 1) {
@@ -352,7 +364,6 @@ public class Adventure {
         }
         System.out.print("\033[0m");
     }
-
 
     public String makeFirstLetterLowerCase(String itemName) {
         return itemName.substring(0, 1).toLowerCase() + itemName.substring(1);
@@ -435,7 +446,7 @@ public class Adventure {
     // there may be found no, one or multiple items
 
     public Item getMatchingItemNames(String searchFor, String action) {
-        String text1, text2; // only minor difference between drop, take and eat
+        String text1, text2; // only minor difference between drop, take, eat and equip
         ArrayList<Item> givenInventory;
         if (Objects.equals(action, "drop")) {
             givenInventory = player.getPlayerItems();
@@ -445,10 +456,14 @@ public class Adventure {
             givenInventory = player.getCurrentRoom().getRoomItems();
             text1 = "Hmmm. I cannot seem to see ";
             text2 = "\033[0;34mTrying to take the ";
-        } else {
+        } else if (Objects.equals(action, "eat")) {
             givenInventory = player.getPlayerItems();
             text1 = "Hmmm. You do not seem to have ";
             text2 = "\033[0;34mTrying to eat the ";
+        } else {
+            givenInventory = player.getPlayerItems();
+            text1 = "Hmmm. You do not seem to have ";
+            text2 = "\033[0;34mTrying to equip the ";
         }
         ArrayList<String> foundItemNames = new ArrayList<>();
         Item foundItem = null; // default no item match
@@ -499,7 +514,7 @@ public class Adventure {
 
     public void eatCommon(Item foundItem) {
         if (foundItem != null) {
-            if (foundItem instanceof Food) {
+            if (map.isFood(foundItem)) {
                 int strength = ((Food) foundItem).getfoodValue(); // Cast item to food
                 if (strength < 0) {
                     System.out.println("\033[0;31mEaten. You lost " + -strength + " strength :(\033[0m");
@@ -510,12 +525,32 @@ public class Adventure {
                 player.dropAnItem(foundItem); // first and only match removed from player;
                 map.getRandomRoom(player.getCurrentRoom()).addItemToRoom(foundItem); // Eaten food respawns somewhere else
             } else {
-                System.out.println("\033[0;31mYou cannot eat that.\033[0m");
+                System.out.println("\033[0;31mThat is not food.\033[0m");
             }
         }
     }
 
-    // return total weight of inventory. Not used for anything yet.
+    public void unequipWeapon() {
+        player.setEquippedWeapon(null);
+        System.out.println("\033[0;34mNothing equipped.\033[0m");
+    }
+
+    public void equipSomething() {
+        System.out.print("Hmmm. Which item do you want to equip? ");
+        String itemToEat = input.nextLine().toUpperCase();
+        Item foundItem = getMatchingItemNames(itemToEat, "equip");
+        if (foundItem != null) {
+            if (map.isWeapon(foundItem)) {
+                player.setEquippedWeapon((Weapon) foundItem); // Cast to weapon
+                System.out.println("\033[0;34mEquipped.\033[0m");
+            } else {
+                System.out.println("\033[0;31mThat is not a weapon.\033[0m");
+            }
+        }
+    }
+
+    // return total weight of inventory.
+
     public int getTotalWeight() {
         ArrayList<Item> objects = player.getPlayerItems();
         int weight = 0;
