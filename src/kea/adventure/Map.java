@@ -53,8 +53,10 @@ public class Map {
     Weapon knife = new meleeWeapon("A blunt knife", 5, 1, 0);
     Weapon sword = new meleeWeapon("A sword", 10, 15, 0);
     Weapon axe = new meleeWeapon("An axe", 15, 25, 0);
+    Weapon bow = new shootingWeapon("A bow", 5, 20, 3);
 
-    Enemy enemy = new Enemy("An orc", 50, axe);
+    Enemy orc = new Enemy("An orc", 50, axe);
+    Enemy elf = new Enemy("A dark elf", 60, bow);
 
     public Map() {
     }
@@ -77,7 +79,7 @@ public class Map {
         rooms.addAll(roomList);
         List<Food> foodList = Arrays.asList(anApple, aPoisonApple, aPear);
         foods.addAll(foodList);
-        List<Weapon> weaponList = Arrays.asList(knife, sword, axe);
+        List<Weapon> weaponList = Arrays.asList(knife, sword, axe, bow);
         weapons.addAll(weaponList);
 
         // Make connections - auto 2 way
@@ -109,7 +111,10 @@ public class Map {
         chapel.addItemToRoom(holyWater);
 
         courtyard.addItemToRoom(sword);
-        chancellery.putEnemyInRoom(enemy);
+        courtyard.addItemToRoom(bow);
+        chancellery.putEnemyInRoom(orc);
+        casements.putEnemyInRoom(elf);
+
         // Items the player has to start with
 
         startInventory.add(magneticCompass);

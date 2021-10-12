@@ -4,13 +4,11 @@ public abstract class Weapon extends Item {
 
     private int damage;
     private int ammo;
-    protected boolean isMeleeWeapon;
 
     public Weapon(String itemName, int itemWeight, int damage, int ammo) {
         super(itemName, itemWeight);
         this.damage = damage;
         this.ammo = ammo;
-        this.isMeleeWeapon = false;
     }
 
     public int getDamage() {
@@ -29,10 +27,7 @@ public abstract class Weapon extends Item {
         this.ammo = ammo;
     }
 
-    public abstract boolean isMeleeWeapon();
-
     public void shootWeapon() {
-        ammo--;
 
     }
 

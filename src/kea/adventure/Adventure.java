@@ -324,7 +324,7 @@ public class Adventure {
         if (weapon == null) {
             System.out.print("and you are unarmed.");
         } else {
-            System.out.print("and you are equipped with " + makeFirstLetterLowerCase(weapon.getItemName()) + ".");
+            System.out.print("and you are equipped with " + makeFirstLetterLowerCase(weapon.getItemName()) + " which does " + weapon.getDamage() + " damage.");
         }
         ArrayList<Item> objects = player.getPlayerItems();
         int size = objects.size();
