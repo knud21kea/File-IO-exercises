@@ -12,8 +12,4 @@ public class Food extends Item {
     public int getfoodValue() {
         return foodValue;
     }
-
-    public void setfoodValue(int health) {
-        this.foodValue = foodValue;
-    }
 }

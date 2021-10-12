@@ -10,14 +10,6 @@ public class Item {
         this.itemWeight = itemWeight;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public void setItemWeight(int itemWeight) {
-        this.itemWeight = itemWeight;
-    }
-
     public String getItemName() {
         return this.itemName;
     }

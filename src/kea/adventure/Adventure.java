@@ -1,7 +1,7 @@
 
 /* ####################################################################################################
 
-                                   --  Adventure (part 2) --
+                                   --  Adventure (part 3) --
 
 DAT21 Java project (compulsory group exercise).
  Developers: Graham Heaven and Lasse Bøgeskov-Jensen, September 2021.
@@ -30,10 +30,10 @@ Added context colours for text
 Change log for version 3:
 
 Added food as extension to item, with both positive and negative food values
-Added Weapon as an extension to item, with sub-classes meleeWeapon and shootingWeapon (todo)
-Added Enemy as new class with ability to equip weapons (todo)
-Added combat system (todo)
-Added commands: Eat, Attack (todo)
+Added Weapon as an extension to item, with sub-classes meleeWeapon and shootingWeapon
+Added Enemy as new class with ability to equip weapons and use them
+Added combat system
+Added commands: Eat, Attack
 
 ################################################################################################################ */
 
@@ -72,7 +72,7 @@ public class Adventure {
         map = new Map();
         map.buildMap();
         map.addStarterItems();
-        player = new Player(map, map.getStarterRoom(), null); // Start unarmed
+        player = new Player(map, map.getStarterRoom(), map.knife); // Start unarmed
         holger = new Player(map, map.getSpecialRoom(), map.axe); // Not used
     }
 
@@ -86,16 +86,21 @@ public class Adventure {
         System.out.println("""
                 \033[4;33m
                 Welcome to this text based Adventure.\033[0;33m
+                
                 You can try to move North, East, South or West
                 It is also possible, nae recommended, to explore your current location. You may find blocked directions, or items lying around.
                 Only the weak would think of quitting, but that is always an option.
+                
                 Most actions cost strength points, but resting gets them back
+                You can find food along the way, which can improve your strength, or reduce it.
+                
+                Some rooms have NPCs who will react if attacked. Killing them could give access to better weapons.
                                         
                 Find the long lost hero or fail trying. How will it end...?\n\033[0m""");
 
         // Start game or exit
 
-        System.out.print("Are you ready to start the adventure? ");
+        System.out.print("Are you ready to start the adventure? (Y/N) ");
         String menuOption = input.nextLine().toUpperCase();
         if (!menuOption.startsWith("Y")) {
             menuOption = "X";
@@ -146,6 +151,8 @@ public class Adventure {
                 eatFood(menuOption);
             } else if (menuOption.equals("EQUIP") || menuOption.equals("Q")) {
                 equipSomething();
+            } else if (menuOption.startsWith("EQUIP ") || menuOption.startsWith("Q ")) {
+                equipWeapon(menuOption);
             } else if (menuOption.equals("UNEQUIP") || menuOption.equals("U")) {
                 unequipWeapon();
             } else if (menuOption.equals("ATTACK") || menuOption.equals("A")) {
@@ -373,7 +380,7 @@ public class Adventure {
         if (enemies.size() > 0) {
             System.out.print("There is an enemy here, " + makeFirstLetterLowerCase(enemies.get(0).getEnemyName()));
             System.out.print(", with " + makeFirstLetterLowerCase(enemies.get(0).getWeaponName()));
-            System.out.println(", and health "+ enemies.get(0).getEnemyHealth() + ".");
+            System.out.println(", and health " + enemies.get(0).getEnemyHealth() + ".");
         } else {
             System.out.println("There are no enemies here.");
         }
@@ -552,8 +559,25 @@ public class Adventure {
 
     public void equipSomething() {
         System.out.print("Hmmm. Which item do you want to equip? ");
-        String itemToEat = input.nextLine().toUpperCase();
-        Item foundItem = getMatchingItemNames(itemToEat, "equip");
+        String itemToEquip = input.nextLine().toUpperCase();
+        Item foundItem = getMatchingItemNames(itemToEquip, "equip");
+        if (foundItem != null) {
+            if (map.isWeapon(foundItem)) {
+                player.setEquippedWeapon((Weapon) foundItem); // Cast to weapon
+                System.out.println("\033[0;34mEquipped.\033[0m");
+            } else {
+                System.out.println("\033[0;31mThat is not a weapon.\033[0m");
+            }
+        }
+    }
+
+    public void equipWeapon(String menuItem) {
+        if (menuItem.startsWith("EQUIP ")) {
+            menuItem = menuItem.substring(6); // command was "equip string"
+        } else {
+            menuItem = menuItem.substring(2); // command was "q string" (equip)
+        }
+        Item foundItem = getMatchingItemNames(menuItem, "equip");
         if (foundItem != null) {
             if (map.isWeapon(foundItem)) {
                 player.setEquippedWeapon((Weapon) foundItem); // Cast to weapon
@@ -607,8 +631,36 @@ public class Adventure {
     }
 
     public void attackEnemy() {
-        // no attack if no weapon equipped
-        // no attack if shooting weapon is equipped but out of ammo
-        // no attack if no enemy in the room
+        Weapon canAttack = player.getEquippedWeapon();
+        if (canAttack == null) {
+            System.out.println("\033[0;31mYou cannot attack without a weapon.\033[0m");
+        } else if (!canAttack.checkIfMelee() && canAttack.getAmmo() == 0) {
+            System.out.println("\033[0;31mYou cannot shoot without ammo.\033[0m");
+        } else if (player.getCurrentRoom().getRoomEnemies().size() == 0) {
+            System.out.println("\033[0;31mThere is no enemy to attack.\033[0m");
+        } else { // attack is possible
+            Enemy enemy = player.getCurrentRoom().getRoomEnemies().get(0);
+            int firstSpace = enemy.getEnemyName().indexOf(" ");
+            System.out.println("\033[0;34mAttacking!...");
+            canAttack.shootWeapon(); // decrement ammo if shooting (override)
+            System.out.print("You did " + canAttack.getDamage() + " damage to the ");
+            System.out.println(enemy.getEnemyName().substring(firstSpace + 1) + " :)");
+            enemy.changeHealth(-canAttack.getDamage());
+
+            // If enemy strength goes below 0, he dies and is replaced in the room by his dropped weapon
+            // Otherwise counterattacks
+
+            if (enemy.getEnemyHealth() > 0) {
+                System.out.println("\033[0;31mCounterattack!...");
+                System.out.print("You took " + enemy.getWeaponDamage() + " damage from the ");
+                System.out.println(enemy.getEnemyName().substring(firstSpace + 1) + " :(\033[0m");
+                updateStrengthPoints(-enemy.getWeaponDamage());
+            } else {
+                System.out.print("\033[0;34mYou killed the " + enemy.getEnemyName().substring(firstSpace + 1) + " :) ");
+                System.out.println(enemy.getWeaponName() + " falls to the floor, and can be taken.\033[0m");
+                player.getCurrentRoom().addItemToRoom(enemy.getEnemyWeapon()); // add weapon to room
+                player.getCurrentRoom().removeEnemyFromRoom(enemy); // remove dead enemy from room
+            }
+        }
     }
 }

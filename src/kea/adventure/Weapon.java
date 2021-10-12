@@ -2,8 +2,8 @@ package kea.adventure;
 
 public abstract class Weapon extends Item {
 
-    private int damage;
-    private int ammo;
+    protected int damage;
+    protected int ammo;
 
     public Weapon(String itemName, int itemWeight, int damage, int ammo) {
         super(itemName, itemWeight);
@@ -15,16 +15,8 @@ public abstract class Weapon extends Item {
         return damage;
     }
 
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
-
     public int getAmmo() {
         return ammo;
-    }
-
-    public void setAmmo(int ammo) {
-        this.ammo = ammo;
     }
 
     public boolean checkIfMelee() {
@@ -32,7 +24,6 @@ public abstract class Weapon extends Item {
     }
 
     public void shootWeapon() {
-
     }
 
     @Override

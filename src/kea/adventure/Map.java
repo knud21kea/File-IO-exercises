@@ -55,7 +55,7 @@ public class Map {
     Weapon axe = new meleeWeapon("An axe", 15, 25, 0);
     Weapon bow = new shootingWeapon("A bow", 5, 20, 3);
 
-    Enemy orc = new Enemy("An orc", 50, axe);
+    Enemy orc = new Enemy("An ugly orc", 50, axe);
     Enemy elf = new Enemy("A dark elf", 60, bow);
 
     public Map() {
@@ -111,7 +111,6 @@ public class Map {
         chapel.addItemToRoom(holyWater);
 
         courtyard.addItemToRoom(sword);
-        courtyard.addItemToRoom(bow);
         chancellery.putEnemyInRoom(orc);
         casements.putEnemyInRoom(elf);
 

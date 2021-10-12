@@ -1,34 +1,38 @@
 package kea.adventure;
 
-import java.util.ArrayList;
-
 public class Enemy {
 
-    private ArrayList<Item> enemyInventory = new ArrayList<>();
-    private String enemyName, weaponName;
+    private Weapon enemyWeapon;
+    private String enemyName;
     private int health;
-    private boolean isDead = false;
 
     public Enemy(String enemyName, int health, Weapon weapon) {
         this.enemyName = enemyName;
         this.health = health;
-        this.weaponName = weapon.getItemName();
-        enemyInventory.add(weapon);
+        this.enemyWeapon = weapon;
     }
 
     public String getEnemyName() {
         return this.enemyName;
     }
 
+    public Weapon getEnemyWeapon() {
+        return this.enemyWeapon;
+    }
+
     public String getWeaponName() {
-        return weaponName;
+        return this.enemyWeapon.getItemName();
+    }
+
+    public int getWeaponDamage() {
+        return this.enemyWeapon.getDamage();
     }
 
     public int getEnemyHealth() {
-        return health;
+        return this.health;
     }
 
-    public void changeInHealth(int healthPoint) {
+    public void changeHealth(int healthPoint) {
         this.health += healthPoint;
     }
 

@@ -43,20 +43,14 @@ public class Room {
     // Take item from room
     public void takeItemFromRoom(Item item) {
         this.items.remove(item);
-
     }
 
     public void putEnemyInRoom(Enemy enemy) {
         this.enemies.add(enemy);
     }
 
-    public void removeEnemyFromRoom() {
-        Room currentRoom = this;
-        this.enemy = null;
-    }
-
-    public Enemy getEnemy() {
-        return enemy;
+    public void removeEnemyFromRoom(Enemy enemy) {
+        this.enemies.remove(enemy);
     }
 
     // connect two rooms South to North
