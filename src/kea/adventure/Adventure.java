@@ -120,7 +120,7 @@ public class Adventure {
 
             if (menuOption.equals("DEAD")) {
                 playerDiedOfExhaustion();
-            } else if (menuOption.equals("EXIT") || menuOption.equals("X") || menuOption.equals("QUIT") || menuOption.equals("Q")) {
+            } else if (menuOption.equals("EXIT") || menuOption.equals("X") || menuOption.equals("QUIT")) {
                 menuOption = endMessage();
             } else if (menuOption.equals("HELP") || menuOption.equals("H") || menuOption.equals("INFO")) {
                 getHelp();
@@ -144,10 +144,12 @@ public class Adventure {
                 eatSomething();
             } else if (menuOption.startsWith("EAT ") || menuOption.startsWith("F ")) {
                 eatFood(menuOption);
-            } else if (menuOption.equals("EQUIP") || menuOption.equals("A")) {
+            } else if (menuOption.equals("EQUIP") || menuOption.equals("Q")) {
                 equipSomething();
             } else if (menuOption.equals("UNEQUIP") || menuOption.equals("U")) {
                 unequipWeapon();
+            } else if (menuOption.equals("ATTACK") || menuOption.equals("A")) {
+                attackEnemy();
             } else if (menuOption.equals("GO") || menuOption.equals("G")) {
                 canMove = goSomewhere();
             } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N") || menuOption.equals("GO N")) {
@@ -186,8 +188,9 @@ public class Adventure {
                 T - Take item
                 D - Drop item
                 F - Eat (food)
-                A - Equip weapon (arm)
+                Q - Equip weapon (arm)
                 U - Unequip weapon (disarm)
+                A - Attack
                 N - Go North
                 E - Go East
                 S - Go South
@@ -324,7 +327,12 @@ public class Adventure {
         if (weapon == null) {
             System.out.print("and you are unarmed.");
         } else {
-            System.out.print("and you are equipped with " + makeFirstLetterLowerCase(weapon.getItemName()) + " which does " + weapon.getDamage() + " damage.");
+            System.out.print("and you are equipped with " + makeFirstLetterLowerCase(weapon.getItemName()));
+            System.out.print(" which does " + weapon.getDamage() + " damage");
+            if (!weapon.checkIfMelee()) {
+                System.out.print(" and has " + weapon.getAmmo() + " shots remaining");
+            }
+            System.out.print(".");
         }
         ArrayList<Item> objects = player.getPlayerItems();
         int size = objects.size();
@@ -596,5 +604,11 @@ public class Adventure {
             strength = 0;
         }
         player.setStrengthPoints(strength);
+    }
+
+    public void attackEnemy() {
+        // no attack if no weapon equipped
+        // no attack if shooting weapon is equipped but out of ammo
+        // no attack if no enemy in the room
     }
 }
