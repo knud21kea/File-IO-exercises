@@ -11,8 +11,6 @@ public class Room {
     private boolean knownNorth, knownEast, knownSouth, knownWest;
     private ArrayList<Item> items = new ArrayList<>(); // List of Item objects that are in the room
     private ArrayList<Enemy> enemies = new ArrayList<>(); // List of Enemy objects that are in the room
-    private Enemy enemy;
-
 
     public Room(String roomName, String roomDescription) {
         this.roomName = roomName;

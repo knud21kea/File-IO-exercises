@@ -2,7 +2,7 @@ package kea.adventure;
 
 public class Food extends Item {
 
-    private int foodValue;
+    private final int foodValue;
 
     public Food(String itemName, int itemWeight, int foodValue) {
         super(itemName, itemWeight);

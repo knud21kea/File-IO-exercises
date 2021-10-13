@@ -96,11 +96,11 @@ public class Adventure {
                 
                 Some rooms have NPCs who will react if attacked. Killing them could give access to better weapons.
                                         
-                Find the long lost hero or fail trying. How will it end...?\n\033[0m""");
+                Find the long lost hero or fail trying. How will it end...?\033[0m""");
 
         // Start game or exit
 
-        System.out.print("Are you ready to start the adventure? (Y/N) ");
+        System.out.print("\nAre you ready to start the adventure? (Y/N) ");
         String menuOption = input.nextLine().toUpperCase();
         if (!menuOption.startsWith("Y")) {
             menuOption = "X";
@@ -181,8 +181,6 @@ public class Adventure {
         }
     }
 
-    // Overload if user only types "go" or "g"
-
     // Help info - only with the short commands
 
     public void getHelp() {
@@ -216,7 +214,7 @@ public class Adventure {
                 If you try to look around there without completing the task, you will lose.
                 The task is just to find and move a gold bar and some holy water to the room.
                 To win you must first drop these items and then look around.\033[4;33m
-                ## This option reduces your strength points ##\033[0m                                
+                ## This option reduces your strength points ##\033[0m
                      ___________________     __________________     __________________
                      |                  |    |                 |    |                 |
                      |    Courtyard     | == |   Chancellery   | == |    Ballroom     |
@@ -270,6 +268,8 @@ public class Adventure {
     public void unknownCommand(String menuOption) {
         System.out.println("\033[0;33mI do not understand \"" + menuOption + "\".\033[0m");
     }
+
+    // Overload if user only types "go" or "g"
 
     public boolean goSomewhere() {
         boolean canMove = false;
@@ -489,12 +489,11 @@ public class Adventure {
         }
         ArrayList<String> foundItemNames = new ArrayList<>();
         Item foundItem = null; // default no item match
-        int numberOfNames = givenInventory.size();
         int countItems = 0;
-        for (int i = 0; i < numberOfNames; i++) {
-            if (givenInventory.get(i).getItemName().toUpperCase().contains(searchFor)) {
+        for (Item item : givenInventory) {
+            if (item.getItemName().toUpperCase().contains(searchFor)) {
                 countItems++;
-                foundItem = givenInventory.get(i); // any matching item
+                foundItem = item; // any matching item
                 foundItemNames.add(foundItem.getItemName());
             }
         }
@@ -557,6 +556,8 @@ public class Adventure {
         System.out.println("\033[0;34mNothing equipped.\033[0m");
     }
 
+    // Overload equipWeapon when user types only "equip" or "q"
+
     public void equipSomething() {
         System.out.print("Hmmm. Which item do you want to equip? ");
         String itemToEquip = input.nextLine().toUpperCase();
@@ -588,13 +589,13 @@ public class Adventure {
         }
     }
 
-    // return total weight of inventory.
+    // return total weight of inventory including equipped weapon.
 
     public int getTotalWeight() {
         ArrayList<Item> objects = player.getPlayerItems();
         int weight = 0;
-        for (int i = 0; i < objects.size(); i++) {
-            weight += (objects.get(i).getItemWeight());
+        for (Item object : objects) {
+            weight += (object.getItemWeight());
         }
         if (player.getEquippedWeapon() != null) {
             weight += player.getEquippedWeapon().itemWeight;
