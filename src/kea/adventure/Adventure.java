@@ -34,6 +34,7 @@ Added Weapon as an extension to item, with sub-classes meleeWeapon and shootingW
 Added Enemy as new class with ability to equip weapons and use them
 Added combat system
 Added commands: Eat, Attack
+Added documentation
 
 ################################################################################################################ */
 
